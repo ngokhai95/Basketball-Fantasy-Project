@@ -1,0 +1,12 @@
+.Header {
+	background-color: #00F;
+	overflow: hidden;
+}
+
+#title {
+	float: left;
+}
+
+.AccountInfo {
+	float: right;
+}
