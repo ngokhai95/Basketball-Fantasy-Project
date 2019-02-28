@@ -1,4 +1,5 @@
 import * as actionTypes from './actions.js';
+import axios from 'axios';
 
 const initialState = {
 	something: [],

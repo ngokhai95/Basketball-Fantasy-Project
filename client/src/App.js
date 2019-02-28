@@ -6,9 +6,9 @@ import * as actionTypes from './store/actions.js';
 
 import { Route, Switch, withRouter } from 'react-router-dom';
 
-import Header from './components/Header/header.js';
-import LoginPage from './components/LoginPage/loginpage.js';
-import RegisterPage from './components/RegisterPage/registerpage.js';
+import Header from './containers/Header/header.js';
+import LoginPage from './containers/LoginPage/loginpage.js';
+import RegisterPage from './containers/RegisterPage/registerpage.js';
 
 class App extends Component {
 	state = {
