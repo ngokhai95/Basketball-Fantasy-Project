@@ -21,15 +21,14 @@ class App extends Component {
 			<div className="App">
 				<Header 
 					loggedIn={this.props.loggedIn}
+					username={this.props.username}
 					 />
+					
 				<Switch>
 					<Route path="/register" component={RegisterPage}/>
 					<Route path="/" exact component={LoginPage} />
 				</Switch>
-					
 
-				<button onClick={this.props.onLogin}>Log in</button>
-				<button onClick={this.props.onLogout}>Log out</button>
 			</div>
 		);
 	}
@@ -37,20 +36,14 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
 	return {
-		loggedIn: state.loggedIn
+		loggedIn: state.loggedIn,
+		username: state.username
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		onLogin: () => dispatch({
-			type: actionTypes.LOGIN,
-			action: true
-		}),
-		onLogout: () => dispatch({
-			type: actionTypes.LOGOUT,
-			action: false
-		})
+
 	};
 }
 

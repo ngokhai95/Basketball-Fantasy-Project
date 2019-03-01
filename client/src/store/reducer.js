@@ -4,12 +4,15 @@ import axios from 'axios';
 const initialState = {
 	something: [],
 	test: false,
-	loggedIn: false
+	loggedIn: false,
+	username: null
 };
 
 const reducer = (state = initialState, action) => {
 	switch (action.type) {
 		case actionTypes.LOGIN:
+		axios.get('http://127.0.0.1:8000/')
+			.then(response => console.log(response));
 			return {
 				...state,
 				loggedIn: action.action
