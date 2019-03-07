@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 
-import { connect } from 'react-redux';
-import * as actionTypes from './../../store/actions.js';
-
 import InputComponent from './../../components/InputComponent/inputcomponent.js';
 
 class LoginPage extends Component {
@@ -57,30 +54,12 @@ class LoginPage extends Component {
 				
 				<button onClick={this.goToRegisterPage}>Register</button>
 
-				<button onClick={this.props.onLogin}>Log in</button>
+				<button onClick={() => {this.props.onLogin(this.state.username, this.state.password)}}>Log in</button>
 				<button onClick={this.props.onLogout}>Log out</button>
 			</div>
 		);
 	}
 }
 
-const mapStateToProps = (state) => {
-	return {
-		loggedIn: state.loggedIn
-	}
-}
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		onLogin: () => dispatch({
-			type: actionTypes.LOGIN,
-			action: true
-		}),
-		onLogout: () => dispatch({
-			type: actionTypes.LOGOUT,
-			action: false
-		})
-	};
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
+export default LoginPage;

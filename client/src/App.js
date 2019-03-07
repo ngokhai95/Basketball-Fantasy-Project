@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 
 import { connect } from 'react-redux';
-import * as actionTypes from './store/actions.js';
+import * as actionCreators from './store/actions.js';
 
 import { Route, Switch, withRouter } from 'react-router-dom';
 
@@ -25,10 +25,27 @@ class App extends Component {
 					 />
 					
 				<Switch>
-					<Route path="/register" component={RegisterPage}/>
-					<Route path="/" exact component={LoginPage} />
+					<Route 
+						path="/register" 
+						render={
+							(props) => 
+								<RegisterPage 
+									{...props}
+									onRegister={this.props.onRegister} />}
+					/>
+					<Route 
+						path="/" 
+						exact 
+						render={
+							(props) => 
+								<LoginPage 
+									{...props} 
+									onLogin={this.props.onLogin}
+									onLogout={this.props.onLogout}/>
+								} 
+					/>
 				</Switch>
-
+				<button>{this.props.userID}</button>
 			</div>
 		);
 	}
@@ -37,13 +54,23 @@ class App extends Component {
 const mapStateToProps = (state) => {
 	return {
 		loggedIn: state.loggedIn,
-		username: state.username
+		username: state.username,
+		userID: state.userID
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-
+		onLogin: (username, password) => dispatch(actionCreators.sendLogin({
+			username: username,
+			password: password
+		})),
+		onLogout: () => dispatch(actionCreators.logout()),
+		onRegister: (username, password, fullname) => dispatch(actionCreators.register({
+			username: username,
+			password: password,
+			fullname: fullname
+		}))
 	};
 }
 

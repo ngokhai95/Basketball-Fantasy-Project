@@ -5,16 +5,15 @@ import InputComponent from './../../components/InputComponent/inputcomponent.js'
 class RegisterPage extends Component {
 	state = {
 		username: '',
-		password: ''
+		password: '',
+		fullname: ''
 	}
 
-	test = () => {
-		console.log(this.state.username);
-		console.log(this.state.password);
+	goToLoginPage = () => {
 		this.props.history.push('./');
 	}
 
-	handleNameChange = (event) => {
+	handleUsernameChange = (event) => {
 		this.setState({
 			username: event.target.value
 		});
@@ -26,6 +25,12 @@ class RegisterPage extends Component {
 		});
 	}
 
+	handleFullNameChange = (event) => {
+		this.setState({
+			fullname: event.target.value
+		})
+	}
+
 	render() {
 		return (
 			<div>
@@ -34,7 +39,7 @@ class RegisterPage extends Component {
 					Username:
 					<InputComponent 
 						name={this.state.username} 
-						handleChange={this.handleNameChange}
+						handleChange={this.handleUsernameChange}
 					/>
 				</label>
 				<br/>
@@ -47,7 +52,19 @@ class RegisterPage extends Component {
 					/>
 				</label>
 				<br/>
-				<button onClick={this.test}>Test</button>
+				<label>
+					Full Name:
+					<InputComponent
+						name={this.state.fullname}
+						handleChange={this.handleFullNameChange}
+					/>
+				</label>
+				<br/>
+				<button onClick={() => {this.props.onRegister(this.state.username, this.state.password, this.state.fullname)}}>
+					Register Account
+				</button>
+				<br/>
+				<button onClick={this.goToLoginPage}>Go back to Login</button>
 			</div>
 			
 		);
