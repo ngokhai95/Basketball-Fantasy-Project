@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 import InputComponent from './../../components/InputComponent/inputcomponent.js';
+
+const SERVER_ADDRESS = 'http://127.0.0.1:8000';
 
 class LoginPage extends Component {
 	constructor(props) {
@@ -8,7 +11,9 @@ class LoginPage extends Component {
 
 		this.state = {
 			username: '',
-			password: ''
+			password: '',
+			failedLogin: false,
+			failedLoginMessage: null
 		}
 	}
 
@@ -28,7 +33,31 @@ class LoginPage extends Component {
 		this.props.history.push('./register');
 	}
 
+	sendLogin = () => {
+		axios.post(`${SERVER_ADDRESS}/login`, {
+			username: this.state.username,
+			password: this.state.password
+		})
+		.then(response => {
+			console.log(response);
+			if (response.data.login) {
+				this.props.completeLogin(response.data);
+				this.props.history.push('./main');
+			} else {
+				this.setState({
+					failedLogin: true,
+					failedLoginMessage: response.data.message
+				})
+			}
+		});
+	}
+
 	render() {
+		let failLoginMessage = null;
+
+		if (this.state.failedLogin) {
+			failLoginMessage = <FailLoginMessage message={this.state.failedLoginMessage}></FailLoginMessage>;
+		}
 		return (
 			<div>
 				<h1>LoginPage</h1>
@@ -54,11 +83,19 @@ class LoginPage extends Component {
 				
 				<button onClick={this.goToRegisterPage}>Register</button>
 
-				<button onClick={() => {this.props.onLogin(this.state.username, this.state.password)}}>Log in</button>
+				<button onClick={this.sendLogin}>Log in</button>
+				{failLoginMessage}
+				<br/>
 				<button onClick={this.props.onLogout}>Log out</button>
 			</div>
 		);
 	}
+}
+
+const FailLoginMessage = (props) => {
+	return (
+		<p>{props.message}</p>
+	);
 }
 
 

@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
-
+import axios from 'axios';
 import InputComponent from './../../components/InputComponent/inputcomponent.js';
+
+const SERVER_ADDRESS = 'http://127.0.0.1:8000';
 
 class RegisterPage extends Component {
 	state = {
 		username: '',
 		password: '',
-		fullname: ''
+		fullname: '',
+		registered: false,
+		registerMessage: null
 	}
 
 	goToLoginPage = () => {
@@ -31,7 +35,27 @@ class RegisterPage extends Component {
 		})
 	}
 
+	registerAccount = () => {
+		axios.post(`${SERVER_ADDRESS}/register`, {
+			username: this.state.username,
+			password: this.state.password,
+			fullname: this.state.fullname
+		})
+		.then(response => {
+			this.setState({
+				registered: true,
+				registerMessage: response.data.message
+			})
+		});
+	}
+
 	render() {
+		let registerMessageBlock = null;
+
+		if (this.state.registered) {
+			registerMessageBlock = <RegisterMessage message={this.state.registerMessage}></RegisterMessage>
+		}
+
 		return (
 			<div>
 				<h1>RegisterPage</h1>
@@ -60,15 +84,24 @@ class RegisterPage extends Component {
 					/>
 				</label>
 				<br/>
-				<button onClick={() => {this.props.onRegister(this.state.username, this.state.password, this.state.fullname)}}>
+				<button onClick={this.registerAccount}>
 					Register Account
 				</button>
+
+				{registerMessageBlock}
 				<br/>
+				
 				<button onClick={this.goToLoginPage}>Go back to Login</button>
 			</div>
 			
 		);
 	}
+}
+
+const RegisterMessage = (props) => {
+	return (
+		<div>{props.message}</div>
+	);
 }
 
 export default RegisterPage;

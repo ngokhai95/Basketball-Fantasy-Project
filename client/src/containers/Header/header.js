@@ -1,5 +1,4 @@
 import React from 'react';
-import AccountInfo from './account_info.js';
 
 import './Header.css';
 
@@ -7,7 +6,7 @@ const Header = (props) => {
 	let accountInfo = null;
 
 	if (props.loggedIn) {
-		accountInfo = <AccountInfo></AccountInfo>
+		accountInfo = <AccountInfo username={props.username}></AccountInfo>
 	}
 
 	return (
@@ -17,6 +16,16 @@ const Header = (props) => {
 				<h1 id="title">NBA Simulating Game</h1>
 				{accountInfo}
 			</header>
+		</div>
+	);
+}
+
+const AccountInfo = (props) => {
+
+	return (
+		<div className="AccountInfo">
+			<h3>{props.username}</h3>
+			<h4>Some dropdown menu</h4>
 		</div>
 	);
 }

@@ -9,14 +9,10 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import Header from './containers/Header/header.js';
 import LoginPage from './containers/LoginPage/loginpage.js';
 import RegisterPage from './containers/RegisterPage/registerpage.js';
+import MainPage from './containers/MainPage/mainpage.js';
 
 class App extends Component {
-	state = {
-
-	}
-
 	render() {
-
 		return (
 			<div className="App">
 				<Header 
@@ -40,12 +36,21 @@ class App extends Component {
 							(props) => 
 								<LoginPage 
 									{...props} 
-									onLogin={this.props.onLogin}
-									onLogout={this.props.onLogout}/>
+									completeLogin={this.props.completeLogin}
+									onLogout={this.props.onLogout}
+									loggedIn={this.props.loggedIn}/>
 								} 
 					/>
+					<Route
+						path="/main"
+						exact
+						render={
+							(props) =>
+								<MainPage
+									{...props}/>
+						}
+					/>
 				</Switch>
-				<button>{this.props.userID}</button>
 			</div>
 		);
 	}
@@ -61,16 +66,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		onLogin: (username, password) => dispatch(actionCreators.sendLogin({
-			username: username,
-			password: password
-		})),
+		completeLogin: (data) => {
+			dispatch(actionCreators.completeLogin(data));
+		},
 		onLogout: () => dispatch(actionCreators.logout()),
-		onRegister: (username, password, fullname) => dispatch(actionCreators.register({
-			username: username,
-			password: password,
-			fullname: fullname
-		}))
 	};
 }
 

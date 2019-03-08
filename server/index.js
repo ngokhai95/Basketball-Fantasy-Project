@@ -61,16 +61,20 @@ app.post('/register', (req, res) => {
 		if (error) {
 			switch (error.errno) {
 				case 1062:
-					console.log("Duplicate exists");
+					res.send({
+						message: "Username is already taken. Please choose another one."
+					})
 					break;
 				case 1406:
-					console.log("String too long");
+					res.send({
+						message: "Username, password, or name is too long."
+					})
 					break;
 			}
 		} else {
 			console.log(`Account "${username}" created.`);
 			res.send({
-				success: true
+				message: "Your account has been created. Please go back to the login page to login."
 			});
 		}
 	});
@@ -83,7 +87,10 @@ app.post('/login', (req, res) => {
 	let query = `SELECT * FROM users WHERE user_name = '${username}'`;
 	connection.query(query, (error, result) => {
 		if (result.length == 0) {
-			console.log(`Username: ${username} not found.`);
+			res.send({
+				login: false,
+				message: `Username: ${username} not found.`
+			})
 		} else {
 			if (result[0].user_password == password) {
 				res.send({
@@ -94,7 +101,10 @@ app.post('/login', (req, res) => {
 				console.log(`Username: ${username} has logged in`);
 				// send client user_id
 			} else {
-				console.log(`Incorrect password for ${username}`);
+				res.send({
+					login: false,
+					message: `Incorrect password for ${username}`
+				})
 			}
 		}
 	})
