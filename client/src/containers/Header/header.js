@@ -1,33 +1,70 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import './Header.css';
 
-const Header = (props) => {
-	let accountInfo = null;
+class Header extends Component {
+	constructor(props) {
+		super(props);
 
-	if (props.loggedIn) {
-		accountInfo = <AccountInfo username={props.username}></AccountInfo>
+		this.state = {
+			showMenu: false
+		}
+
+		this.showMenu = this.showMenu.bind(this);
+		this.closeMenu = this.closeMenu.bind(this);
 	}
 
-	return (
+	showMenu = (event) => {
+		event.preventDefault();
+    
+	    this.setState({ showMenu: true }, () => {
+			document.addEventListener('click', this.closeMenu);
+		});
+	}
+	closeMenu = (event) => {
+    
+		if (!this.dropdownMenu.contains(event.target)) {
+      
+			this.setState({ showMenu: false }, () => {
+				document.removeEventListener('click', this.closeMenu);
+			});
+    	}
+    }
 
-		<div className="Header">
-			<header>
-				<h1 id="title">NBA Simulating Game</h1>
-				{accountInfo}
-			</header>
-		</div>
-	);
+	render() {
+		let accountInfo = null;
+
+		if (this.props.loggedIn) {
+			accountInfo = (
+				<div className="AccountInfo">
+					<h3>{this.props.username}</h3>
+
+					{this.state.showMenu ? (
+						<div 
+							className="menu"
+							ref={(element) => {
+								this.dropdownMenu = element;
+							}}>
+							<button>Manage Account</button>
+							<button>Manage Team</button>
+							<button>Search</button>
+						</div>) : null}
+					<button onClick={this.showMenu}>Show menu</button>
+				</div>);
+		}
+
+		return (
+			<div className="Header">
+				<header>
+					<h1 id="title">NBA Simulating Game</h1>
+					{accountInfo}
+				</header>
+			</div>
+		);
+	}
+	
 }
 
-const AccountInfo = (props) => {
 
-	return (
-		<div className="AccountInfo">
-			<h3>{props.username}</h3>
-			<h4>Some dropdown menu</h4>
-		</div>
-	);
-}
 		
 export default Header;

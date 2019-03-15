@@ -10,3 +10,8 @@
 .AccountInfo {
 	float: right;
 }
+
+.menu {
+	position: relative;
+	display: inline-block;
+}

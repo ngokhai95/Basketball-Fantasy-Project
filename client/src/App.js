@@ -10,6 +10,7 @@ import Header from './containers/Header/header.js';
 import LoginPage from './containers/LoginPage/loginpage.js';
 import RegisterPage from './containers/RegisterPage/registerpage.js';
 import MainPage from './containers/MainPage/mainpage.js';
+import TeamCreationPage from './containers/TeamCreationPage/teamcreationpage.js';
 
 class App extends Component {
 	render() {
@@ -47,6 +48,16 @@ class App extends Component {
 						render={
 							(props) =>
 								<MainPage
+									{...props}
+									teamInfo={this.props.teamInfo}/>
+						}
+					/>
+					<Route
+						path="/createteam"
+						exact
+						render={
+							(props) =>
+								<TeamCreationPage
 									{...props}/>
 						}
 					/>
@@ -60,7 +71,8 @@ const mapStateToProps = (state) => {
 	return {
 		loggedIn: state.loggedIn,
 		username: state.username,
-		userID: state.userID
+		userID: state.userID,
+		teamInfo: state.teamInfo
 	}
 }
 

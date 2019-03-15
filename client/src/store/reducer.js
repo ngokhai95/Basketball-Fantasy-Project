@@ -7,7 +7,8 @@ import * as actionTypes from './actions.js';
 const initialState = {
 	loggedIn: false,
 	username: null,
-	userID: 123
+	userID: null,
+	teamInfo: null
 };
 
 const reducer = (state = initialState, action) => {
@@ -19,7 +20,8 @@ const reducer = (state = initialState, action) => {
 					...state,
 					loggedIn: data.login,
 					username: data.username,
-					userID: data.user_id
+					userID: data.user_id,
+					teamInfo: data.teamInfo
 				}
 			} else {
 				// let user know of failure
