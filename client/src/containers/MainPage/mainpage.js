@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import InputComponent from './../../components/InputComponent/inputcomponent.js';
 
+import axios from 'axios';
+
+const SERVER_ADDRESS = 'http://127.0.0.1:8000';
+
 class MainPage extends Component {
 	constructor(props) {
 		super(props);
@@ -16,12 +20,22 @@ class MainPage extends Component {
 		});
 	}
 
+	createNewTeam = () => {
+		axios.post(`${SERVER_ADDRESS}/createTeam`, {
+			teamName: this.state.setTeamName,
+			userID: this.props.userID
+		}).then(response => {
+			if (response.data.teamCreated) {
+				this.props.addNewTeam(response.data.teamInfo);
+				this.goToTeamCreationPage();
+			}
+			
+		});
+	}
+
 	goToTeamCreationPage = () => {
 		this.props.history.push({
-			pathname: '/createteam',
-			state: {
-				teamName: this.state.setTeamName
-			}
+			pathname: '/createteam'
 		});
 	}
 
@@ -35,11 +49,21 @@ class MainPage extends Component {
 						name={this.setTeamName}
 						handleChange={this.handleTeamNameChange}/>
 					<br/>
-					<button onClick={this.goToTeamCreationPage}>Create Team</button>
+					<button onClick={this.createNewTeam}>Create Team</button>
 				</label>
 			);
 		} else {
-			pageDisplay = <p>Team exists</p>
+			let teamInfo = this.props.teamInfo;
+
+			pageDisplay = (<div>
+				<p>TeamName: {teamInfo.team_name}</p>
+				<p>Captain: {teamInfo.captain}</p>
+				<p>Defensive Score: {teamInfo.defensive_score}</p>
+				<p>Offensive Score: {teamInfo.offensive_score}</p>
+				<p>Overall Score: {teamInfo.overall_score}</p>
+				<button onClick={this.goToTeamCreationPage}>Manage Team</button>
+				<button>Simulate</button>
+			</div>);
 		}
 
 		return (

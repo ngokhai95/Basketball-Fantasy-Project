@@ -16,12 +16,13 @@ const reducer = (state = initialState, action) => {
 		case actionTypes.LOGIN:
 			let data = action.payload;
 			if (data.login) {
+				console.log(data);
 				return {
 					...state,
 					loggedIn: data.login,
 					username: data.username,
 					userID: data.user_id,
-					teamInfo: data.teamInfo
+					teamInfo: data.team_info
 				}
 			} else {
 				// let user know of failure
@@ -33,6 +34,11 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				loggedIn: false
+			}
+		case actionTypes.ADDTEAM:
+			return {
+				...state,
+				teamInfo: action.payload
 			}
 		default:
 			return state;

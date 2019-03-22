@@ -89,25 +89,65 @@ app.post('/login', (req, res) => {
 				let teamID = result[0].team_id;
 
 				if (teamID != null) {
-					let teamQuery = `SELECT * FROM teams WHERE team_id = ${teamID}`;
+					let teamQuery = `SELECT * FROM Teams WHERE team_id = ${teamID}`;
 					connection.query(teamQuery, (teamError, teamResult) => {
-						message.team_info = teamResult[0];
-
-						res.send(message);
+						if (teamError) {
+							console.log(teamError);
+						} else {
+							message.team_info = teamResult[0];
+							res.send(message);
+						}
+						
 					});
 				} else {
 					res.send(message);
 				}
 
-				
 				console.log(`Username: ${username} has logged in`);
-				// send client user_id
 			} else {
 				res.send({
 					login: false,
 					message: `Incorrect password for ${username}`
 				})
 			}
+		}
+	})
+});
+
+app.post('/createTeam', (req, res) => {
+	let teamName = req.body.teamName;
+	let userID = req.body.userID;
+
+	let query = `INSERT INTO Teams (team_name) VALUES ('${teamName}');`;
+	connection.query(query, (error, result) => {
+		if (error) {
+			console.log(error);
+		} else {
+			// update user table with team_id
+			let updateUserQuery = `UPDATE Users SET team_id = (SELECT team_id FROM Teams WHERE team_name = '${teamName}') 
+				WHERE user_id = ${userID}`;
+
+			connection.query(updateUserQuery, (userError, userResult) => {
+				if (userError) {
+					console.log(userError);
+				} else {
+					// send user the team object
+					let teamQuery = `SELECT * FROM Teams WHERE team_id = (SELECT team_id FROM Users WHERE user_id = ${userID})`;
+
+					connection.query(teamQuery, (teamError, teamResult) => {
+						if (teamError) {
+							console.log(teamError);
+						} else {
+							let message = {
+								teamCreated: true,
+								teamInfo: teamResult[0]
+							}
+							console.log(`Team created for userID: ${userID}`)
+							res.send(message);
+						}
+					});
+				}
+			});
 		}
 	})
 });

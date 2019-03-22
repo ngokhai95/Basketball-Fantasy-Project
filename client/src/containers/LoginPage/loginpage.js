@@ -39,7 +39,6 @@ class LoginPage extends Component {
 			password: this.state.password
 		})
 		.then(response => {
-			console.log(response);
 			if (response.data.login) {
 				this.props.completeLogin(response.data);
 				this.props.history.push('./main');

@@ -4,6 +4,7 @@
 
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
+export const ADDTEAM = 'ADDTEAM';
 
 export const logout = () => {
 	return {
@@ -14,6 +15,13 @@ export const logout = () => {
 export const completeLogin = (data) => {
 	return {
 		type: LOGIN,
+		payload: data
+	}
+}
+
+export const addNewTeam = (data) => {
+	return {
+		type: ADDTEAM,
 		payload: data
 	}
 }

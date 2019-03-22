@@ -49,7 +49,9 @@ class App extends Component {
 							(props) =>
 								<MainPage
 									{...props}
-									teamInfo={this.props.teamInfo}/>
+									teamInfo={this.props.teamInfo}
+									userID={this.props.userID}
+									addNewTeam={this.props.addNewTeam}/>
 						}
 					/>
 					<Route
@@ -58,7 +60,8 @@ class App extends Component {
 						render={
 							(props) =>
 								<TeamCreationPage
-									{...props}/>
+									{...props}
+									teamInfo={this.props.teamInfo}/>
 						}
 					/>
 				</Switch>
@@ -82,6 +85,9 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(actionCreators.completeLogin(data));
 		},
 		onLogout: () => dispatch(actionCreators.logout()),
+		addNewTeam: (data) => {
+			dispatch(actionCreators.addNewTeam(data));
+		}
 	};
 }
 
