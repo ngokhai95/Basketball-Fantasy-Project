@@ -8,7 +8,8 @@ const initialState = {
 	loggedIn: false,
 	username: null,
 	userID: null,
-	teamInfo: null
+	teamInfo: null,
+	teamCreation: [null, null, null, null, null]
 };
 
 const reducer = (state = initialState, action) => {

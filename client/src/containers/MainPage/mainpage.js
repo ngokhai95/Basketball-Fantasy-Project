@@ -61,7 +61,7 @@ class MainPage extends Component {
 				<p>Defensive Score: {teamInfo.defensive_score}</p>
 				<p>Offensive Score: {teamInfo.offensive_score}</p>
 				<p>Overall Score: {teamInfo.overall_score}</p>
-				<button onClick={this.goToTeamCreationPage}>Manage Team</button>
+				<button onClick={this.goToTeamCreationPage}>Create New Team</button>
 				<button>Simulate</button>
 			</div>);
 		}

@@ -5,8 +5,6 @@ const app = express();
 
 const PORT_NUMBER = 8000;
 
-
-
 const connection = mysql.createConnection({
     host     : 'nba-fantasy.c4orcjbvqblx.us-east-2.rds.amazonaws.com',
     database : 'nba',

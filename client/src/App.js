@@ -11,6 +11,7 @@ import LoginPage from './containers/LoginPage/loginpage.js';
 import RegisterPage from './containers/RegisterPage/registerpage.js';
 import MainPage from './containers/MainPage/mainpage.js';
 import TeamCreationPage from './containers/TeamCreationPage/teamcreationpage.js';
+import SearchPage from './containers/SearchPage/searchpage.js';
 
 class App extends Component {
 	render() {
@@ -61,7 +62,16 @@ class App extends Component {
 							(props) =>
 								<TeamCreationPage
 									{...props}
-									teamInfo={this.props.teamInfo}/>
+									teamInfo={this.props.teamInfo}
+									teamCreation={this.props.teamCreation}/>
+						}
+					/>
+					<Route
+						path="/search"
+						render={
+							(props) =>
+								<SearchPage
+									{...props}/>
 						}
 					/>
 				</Switch>
@@ -75,7 +85,8 @@ const mapStateToProps = (state) => {
 		loggedIn: state.loggedIn,
 		username: state.username,
 		userID: state.userID,
-		teamInfo: state.teamInfo
+		teamInfo: state.teamInfo,
+		teamCreation: state.teamCreation
 	}
 }
 
