@@ -1,101 +1,104 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import "./loginpage.css";
+import React, { Component } from "react";
+import axios from "axios";
+import Container from "react-bootstrap/Container";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 
-import InputComponent from './../../components/InputComponent/inputcomponent.js';
-
-const SERVER_ADDRESS = 'http://127.0.0.1:8000';
+const SERVER_ADDRESS = "http://127.0.0.1:8000";
 
 class LoginPage extends Component {
-	constructor(props) {
-		super(props);
+  state = {
+    username: "",
+    password: "",
+    failedLogin: false,
+    failedLoginMessage: null
+  };
 
-		this.state = {
-			username: '',
-			password: '',
-			failedLogin: false,
-			failedLoginMessage: null
-		}
-	}
+  handleNameChange = event => {
+    this.setState({
+      username: event.target.value
+    });
+  };
 
-	handleNameChange = (event) => {
-		this.setState({
-			username: event.target.value
-		});
-	}
+  handlePasswordChange = event => {
+    this.setState({
+      password: event.target.value
+    });
+  };
 
-	handlePasswordChange = (event) => {
-		this.setState({
-			password: event.target.value
-		});
-	}
+  goToRegisterPage = () => {
+    this.props.history.push("./register");
+  };
 
-	goToRegisterPage = () => {
-		this.props.history.push('./register');
-	}
+  sendLogin = () => {
+    axios
+      .post(`${SERVER_ADDRESS}/login`, {
+        username: this.state.username,
+        password: this.state.password
+      })
+      .then(response => {
+        if (response.data.login) {
+          this.props.completeLogin(response.data);
+          this.props.history.push("./main");
+        } else {
+          this.setState({
+            failedLogin: true,
+            failedLoginMessage: response.data.message
+          });
+        }
+      });
+  };
 
-	sendLogin = () => {
-		axios.post(`${SERVER_ADDRESS}/login`, {
-			username: this.state.username,
-			password: this.state.password
-		})
-		.then(response => {
-			if (response.data.login) {
-				this.props.completeLogin(response.data);
-				this.props.history.push('./main');
-			} else {
-				this.setState({
-					failedLogin: true,
-					failedLoginMessage: response.data.message
-				})
-			}
-		});
-	}
+  render() {
+    let failLoginMessage = null;
 
-	render() {
-		let failLoginMessage = null;
-
-		if (this.state.failedLogin) {
-			failLoginMessage = <FailLoginMessage message={this.state.failedLoginMessage}></FailLoginMessage>;
-		}
-		return (
-			<div>
-				<h1>LoginPage</h1>
-
-				<label>
-					Username:
-					<InputComponent 
-						name={this.state.username}
-						handleChange={this.handleNameChange}
-						/>
-				</label>
-				<br/>
-				<label>
-					Password:
-					<InputComponent 
-						name={this.state.password}
-						handleChange={this.handlePasswordChange}
-						type={"password"}
-						/>
-				</label>
-
-				<br/>
-				
-				<button onClick={this.goToRegisterPage}>Register</button>
-
-				<button onClick={this.sendLogin}>Log in</button>
-				{failLoginMessage}
-				<br/>
-				<button onClick={this.props.onLogout}>Log out</button>
-			</div>
-		);
-	}
+    if (this.state.failedLogin) {
+      failLoginMessage = (
+        <FailLoginMessage message={this.state.failedLoginMessage} />
+      );
+    }
+    return (
+      <Container c>
+        <h3>Sign In</h3>
+        <Form className="form-signin">
+          <Form.Group controlId="loginUserId">
+            <Form.Label>Username</Form.Label>
+            <Form.Control
+              className="form-control"
+              value={this.state.username}
+              placeholder="Enter Username"
+              onChange={this.handleNameChange}
+            />
+          </Form.Group>
+          <Form.Group controlId="loginPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              className="form-control"
+              value={this.state.password}
+              placeholder="Enter Password"
+              type="password"
+              onChange={this.handlePasswordChange}
+            />
+          </Form.Group>
+          <Button variant="info" type="button" onClick={this.goToRegisterPage}>
+            Register
+          </Button>
+          <Button variant="danger" type="button" onClick={this.props.onLogout}>
+            Logout
+          </Button>
+          <Button variant="primary" type="button" onClick={this.sendLogin}>
+            Login
+          </Button>
+          {failLoginMessage}
+        </Form>
+      </Container>
+    );
+  }
 }
 
-const FailLoginMessage = (props) => {
-	return (
-		<p>{props.message}</p>
-	);
-}
-
+const FailLoginMessage = props => {
+  return <p>{props.message}</p>;
+};
 
 export default LoginPage;
