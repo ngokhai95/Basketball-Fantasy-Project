@@ -59,7 +59,7 @@ class LoginPage extends Component {
       );
     }
     return (
-      <Container c>
+      <Container>
         <h3>Sign In</h3>
         <Form className="form-signin">
           <Form.Group controlId="loginUserId">
