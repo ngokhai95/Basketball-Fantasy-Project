@@ -4,6 +4,7 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
+import Table from "react-bootstrap/Table";
 
 const SERVER_ADDRESS = "http://127.0.0.1:8000";
 class SearchPage extends Component {
@@ -13,7 +14,8 @@ class SearchPage extends Component {
     this.state = {
       playerNameSearchTerm: "",
       teamSearchTerm: "",
-      jerseyNumberSearchterm: ""
+      jerseyNumberSearchterm: "",
+      players: []
     };
   }
 
@@ -22,11 +24,11 @@ class SearchPage extends Component {
   };
 
   handleTeamInputChange = event => {
-    this.setState({ playerNameSearchTerm: event.target.value });
+    this.setState({ teamSearchTerm: event.target.value });
   };
 
   handleJerseyInputChange = event => {
-    this.setState({ playerNameSearchTerm: event.target.value });
+    this.setState({ jerseyNumberSearchterm: event.target.value });
   };
 
   handleSearchSubmit = event => {
@@ -36,12 +38,23 @@ class SearchPage extends Component {
       .post(`${SERVER_ADDRESS}/search`, {
         playerSearchTerm: this.state.playerNameSearchTerm,
         teamSearchTerm: this.state.teamSearchTerm,
-        jerseySearchterm: this.state.jerseyNumberSearchterm
+        jerseyNumberSearchterm: this.state.jerseyNumberSearchterm
       })
       .then(response => {
-        this.props.completeSearch(response.data);
-        this.props.history.push("./main");
+        // this.props.completeSearch(response.data);
+        // this.props.history.push("./main");
+        console.log(response);
+        this.setState({ players: response.data.playersSearchResult });
       });
+  };
+
+  /**
+   * handles what happens when player clicks the add button
+   * TODO: Either check if a player exist in user's team before displaying in
+   * search result or check when adding it to transaction table
+   */
+  handleAddPlayerToTeamButtonClick = player => {
+    console.log(`add player_id=${player.player_id} to team`);
   };
 
   render() {
@@ -94,9 +107,62 @@ class SearchPage extends Component {
             Search
           </Button>
         </Form>
+        <br />
+        <Table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Offensive Score</th>
+              <th>Defensive Score</th>
+              <th>Overall Score</th>
+              <th>Position</th>
+              <th>Jersey #</th>
+              <th>Add to Team</th>
+            </tr>
+          </thead>
+          <PlayersTableBody
+            players={this.state.players}
+            onAddPlayerButtonClick={this.handleAddPlayerToTeamButtonClick}
+          />
+        </Table>
       </Container>
     );
   }
 }
+
+const PlayersTableBody = props => {
+  const players = props.players.map(player => {
+    return (
+      <PlayersTableRow
+        key={player.player_id}
+        aPlayer={player}
+        onAddPlayerButtonClick={props.onAddPlayerButtonClick}
+      />
+    );
+  });
+
+  return <tbody>{players}</tbody>;
+};
+
+const PlayersTableRow = props => {
+  return (
+    <tr>
+      <td>{props.aPlayer.name}</td>
+      <td>{props.aPlayer.offense_score}</td>
+      <td>{props.aPlayer.defense_score}</td>
+      <td>{props.aPlayer.overall_score}</td>
+      <td>{props.aPlayer.position}</td>
+      <td>{props.aPlayer.jersey_number}</td>
+      <td>
+        <Button
+          type="button"
+          onClick={event => props.onAddPlayerButtonClick(props.aPlayer)}
+        >
+          ADD
+        </Button>
+      </td>
+    </tr>
+  );
+};
 
 export default SearchPage;

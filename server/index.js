@@ -149,12 +149,22 @@ app.post("/createTeam", (req, res) => {
 });
 
 app.post("/search", (req, res) => {
-  const playerNameSearchTerm = req.body.playerSearchTerm.split(" ");
+  let playerNameSearchTerm = req.body.playerSearchTerm;
   const teamSearchTerm = req.body.teamSearchTerm;
-  const jerseySearchterm = req.body.jerseyNumberSearchterm;
+  const jerseySearchTerm = req.body.jerseyNumberSearchterm;
 
-  let searchPlayersQuery = `SELECT * FROM Players WHERE lower(Players.name) LIKE '%${playerNameSearchTerm[0].toLowerCase()}%'`;
-  connection.query(searchPlayersQuery, (error, result) => {
+  if (playerNameSearchTerm === "") {
+    playerNameSearchTerm = "\\";
+  }
+
+  let searchPlayersQuery = `lower(Players.name) LIKE '%${playerNameSearchTerm.toLowerCase()}%'`;
+
+  let jerseySearchTermQuery =
+    `Players.jersey_number = ` +
+    (jerseySearchTerm !== "" ? jerseySearchTerm : "1000"); // if jersey === "", make jersey a large number
+
+  let playerSearchQuery = `SELECT * FROM Players WHERE ${searchPlayersQuery} OR (${jerseySearchTermQuery})`;
+  connection.query(playerSearchQuery, (error, result) => {
     if (error) {
       console.log();
       console.log(error);
