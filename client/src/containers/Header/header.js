@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import './Header.css';
+import "./Header.css";
 
 class Header extends Component {
 	constructor(props) {
@@ -8,28 +8,26 @@ class Header extends Component {
 
 		this.state = {
 			showMenu: false
-		}
+		};
 
 		this.showMenu = this.showMenu.bind(this);
 		this.closeMenu = this.closeMenu.bind(this);
 	}
 
-	showMenu = (event) => {
+	showMenu = event => {
 		event.preventDefault();
-    
-	    this.setState({ showMenu: true }, () => {
-			document.addEventListener('click', this.closeMenu);
+
+		this.setState({ showMenu: true }, () => {
+			document.addEventListener("click", this.closeMenu);
 		});
-	}
-	closeMenu = (event) => {
-    
+	};
+	closeMenu = event => {
 		if (!this.dropdownMenu.contains(event.target)) {
-      
 			this.setState({ showMenu: false }, () => {
-				document.removeEventListener('click', this.closeMenu);
+				document.removeEventListener("click", this.closeMenu);
 			});
-    	}
-    }
+		}
+	};
 
 	render() {
 		let accountInfo = null;
@@ -40,17 +38,20 @@ class Header extends Component {
 					<h3>{this.props.username}</h3>
 
 					{this.state.showMenu ? (
-						<div 
+						<div
 							className="menu"
-							ref={(element) => {
+							ref={element => {
 								this.dropdownMenu = element;
-							}}>
+							}}
+						>
 							<button>Manage Account</button>
 							<button>Manage Team</button>
 							<button>Search</button>
-						</div>) : null}
+						</div>
+					) : null}
 					<button onClick={this.showMenu}>Show menu</button>
-				</div>);
+				</div>
+			);
 		}
 
 		return (
@@ -62,9 +63,6 @@ class Header extends Component {
 			</div>
 		);
 	}
-	
 }
 
-
-		
 export default Header;

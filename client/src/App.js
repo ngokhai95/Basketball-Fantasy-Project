@@ -1,78 +1,75 @@
-import React, { Component } from 'react';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
 
-import { connect } from 'react-redux';
-import * as actionCreators from './store/actions.js';
+import { connect } from "react-redux";
+import * as actionCreators from "./store/actions.js";
 
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter } from "react-router-dom";
 
-import Header from './containers/Header/header.js';
-import LoginPage from './containers/LoginPage/loginpage.js';
-import RegisterPage from './containers/RegisterPage/registerpage.js';
-import MainPage from './containers/MainPage/mainpage.js';
-import TeamCreationPage from './containers/TeamCreationPage/teamcreationpage.js';
-import SearchPage from './containers/SearchPage/searchpage.js';
+import Header from "./containers/Header/header.js";
+import LoginPage from "./containers/LoginPage/loginpage.js";
+import RegisterPage from "./containers/RegisterPage/registerpage.js";
+import MainPage from "./containers/MainPage/mainpage.js";
+import TeamCreationPage from "./containers/TeamCreationPage/teamcreationpage.js";
+import SearchPage from "./containers/SearchPage/searchpage.js";
 
 class App extends Component {
 	render() {
 		return (
 			<div className="App">
-				<Header 
+				<Header
 					loggedIn={this.props.loggedIn}
 					username={this.props.username}
-					 />
-					
+				/>
+
 				<Switch>
-					<Route 
-						path="/register" 
-						render={
-							(props) => 
-								<RegisterPage 
-									{...props}
-									onRegister={this.props.onRegister} />}
+					<Route
+						path="/register"
+						render={props => (
+							<RegisterPage
+								{...props}
+								onRegister={this.props.onRegister}
+							/>
+						)}
 					/>
-					<Route 
-						path="/" 
-						exact 
-						render={
-							(props) => 
-								<LoginPage 
-									{...props} 
-									completeLogin={this.props.completeLogin}
-									onLogout={this.props.onLogout}
-									loggedIn={this.props.loggedIn}/>
-								} 
+					<Route
+						path="/"
+						exact
+						render={props => (
+							<LoginPage
+								{...props}
+								completeLogin={this.props.completeLogin}
+								onLogout={this.props.onLogout}
+								loggedIn={this.props.loggedIn}
+							/>
+						)}
 					/>
 					<Route
 						path="/main"
 						exact
-						render={
-							(props) =>
-								<MainPage
-									{...props}
-									teamInfo={this.props.teamInfo}
-									userID={this.props.userID}
-									addNewTeam={this.props.addNewTeam}/>
-						}
+						render={props => (
+							<MainPage
+								{...props}
+								teamInfo={this.props.teamInfo}
+								userID={this.props.userID}
+								addNewTeam={this.props.addNewTeam}
+							/>
+						)}
 					/>
 					<Route
 						path="/createteam"
 						exact
-						render={
-							(props) =>
-								<TeamCreationPage
-									{...props}
-									teamInfo={this.props.teamInfo}
-									teamCreation={this.props.teamCreation}/>
-						}
+						render={props => (
+							<TeamCreationPage
+								{...props}
+								teamInfo={this.props.teamInfo}
+								teamCreation={this.props.teamCreation}
+							/>
+						)}
 					/>
 					<Route
 						path="/search"
-						render={
-							(props) =>
-								<SearchPage
-									{...props}/>
-						}
+						render={props => <SearchPage {...props} />}
 					/>
 				</Switch>
 			</div>
@@ -80,26 +77,31 @@ class App extends Component {
 	}
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		loggedIn: state.loggedIn,
 		username: state.username,
 		userID: state.userID,
 		teamInfo: state.teamInfo,
 		teamCreation: state.teamCreation
-	}
-}
+	};
+};
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
 	return {
-		completeLogin: (data) => {
+		completeLogin: data => {
 			dispatch(actionCreators.completeLogin(data));
 		},
 		onLogout: () => dispatch(actionCreators.logout()),
-		addNewTeam: (data) => {
+		addNewTeam: data => {
 			dispatch(actionCreators.addNewTeam(data));
 		}
 	};
-}
+};
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+export default withRouter(
+	connect(
+		mapStateToProps,
+		mapDispatchToProps
+	)(App)
+);

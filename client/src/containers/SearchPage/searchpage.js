@@ -1,18 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class SearchPage extends Component {
-
 	constructor(props) {
 		super(props);
 
-		this.state = {
-		}
+		this.state = {};
 	}
-	
+
 	render() {
-		return (
-			<h1>Search Page</h1>
-		);
+		return <h1>Search Page</h1>;
 	}
 }
 
