@@ -121,7 +121,7 @@ app.post("/createTeam", (req, res) => {
     } else {
       // update user table with team_id
       let updateUserQuery = `UPDATE Users SET team_id = (SELECT team_id FROM Teams WHERE team_name = '${teamName}') 
-				WHERE user_id = ${userID}`;
+        WHERE user_id = ${userID}`;
 
       connection.query(updateUserQuery, (userError, userResult) => {
         if (userError) {
@@ -175,4 +175,13 @@ app.post("/search", (req, res) => {
       res.send(message);
     }
   });
+});
+
+app.post("/addPlayer", (req, res) => {
+  let playerID = req.body.playerID;
+  let teamID = req.body.teamID;
+  let userID = req.body.userID;
+
+  res.send("ok");
+  console.log(playerID, teamID, userID);
 });

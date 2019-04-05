@@ -3,22 +3,60 @@ import axios from "axios";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 import Col from "react-bootstrap/Col";
 import Table from "react-bootstrap/Table";
 
 const SERVER_ADDRESS = "http://127.0.0.1:8000";
+
 class SearchPage extends Component {
   constructor(props) {
     super(props);
+
+    this.handleShow = this.handleShow.bind(this);
+    this.handleClose = this.handleClose.bind(this);
 
     this.state = {
       playerNameSearchTerm: "",
       teamSearchTerm: "",
       jerseyNumberSearchterm: "",
       players: [],
-      playerIndexToChange: this.props.match.params.playerIndex
+      playerIndexToChange: this.props.match.params.playerIndex,
+      show: false,
+      selectedPlayer: null
     };
   }
+
+  handleClose = () => {
+    this.setState({ show: false });
+  };
+
+  handleShow = () => {
+    this.setState({ show: true });
+  };
+
+  /**
+* handles sending add player to server
+TODO: send request
+*/
+  handleAddPlayerConfirmation = player => {
+    console.log(this.props.teamID);
+    axios
+      .post(`${SERVER_ADDRESS}/addplayer`, {
+        userID: this.props.userID,
+        teamID: this.props.teamID,
+        playerID: player.player_id
+      })
+      .then(response => {
+        console.log(response);
+        this.props.addPlayer([
+          this.state.playerIndexToChange,
+          player.player_id
+        ]);
+        this.props.history.push({ pathname: "/createteam" });
+      });
+    console.log(`add player_id=${player.player_id} to team`);
+  };
 
   handlePlayerNameInputChange = event => {
     this.setState({ playerNameSearchTerm: event.target.value });
@@ -54,11 +92,24 @@ class SearchPage extends Component {
    * TODO: Either check if a player exist in user's team before displaying in
    * search result or check when adding it to transaction table
    */
-  handleAddPlayerToTeamButtonClick = player => {
-    console.log(`add player_id=${player.player_id} to team`);
+  handleToggleAddPlayerConfirmation = player => {
+    this.setState({ selectedPlayer: player });
+    this.handleShow();
   };
 
   render() {
+    let buyConfirm = null;
+
+    if (this.state.show) {
+      buyConfirm = (
+        <BuyConfirm
+          handleClose={this.handleClose}
+          show={this.state.show}
+          selectedPlayer={this.state.selectedPlayer}
+          confirmAdd={this.handleAddPlayerConfirmation}
+        />
+      );
+    }
     return (
       <Container>
         <h1>SearchPage</h1>
@@ -123,13 +174,40 @@ class SearchPage extends Component {
           </thead>
           <PlayersTableBody
             players={this.state.players}
-            onAddPlayerButtonClick={this.handleAddPlayerToTeamButtonClick}
+            onAddPlayerButtonClick={this.handleToggleAddPlayerConfirmation}
           />
         </Table>
+        {buyConfirm}
       </Container>
     );
   }
 }
+
+const BuyConfirm = props => {
+  return (
+    <Modal show={props.show} onHide={props.handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Add Player</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        Are you sure you want to add {props.selectedPlayer.name} to your team?
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={props.handleClose}>
+          No
+        </Button>
+        <Button
+          variant="primary"
+          onClick={() => {
+            props.confirmAdd(props.selectedPlayer);
+          }}
+        >
+          Yes, Add!
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
+};
 
 const PlayersTableBody = props => {
   const players = props.players.map(player => {

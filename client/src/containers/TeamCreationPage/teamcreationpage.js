@@ -33,7 +33,7 @@ class TeamCreationPage extends Component {
 					</Button>
 				);
 			} else {
-				return <p>player: {player}</p>;
+				return <p key={index}>player: {player}</p>;
 			}
 		});
 		return (

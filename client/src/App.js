@@ -71,7 +71,14 @@ class App extends Component {
 					/>
 					<Route
 						path="/search/:playerIndex"
-						render={props => <SearchPage {...props} />}
+						render={props => (
+							<SearchPage
+								{...props}
+								addPlayer={this.props.addPlayer}
+								userID={this.props.userID}
+								teamID={this.props.teamInfo.team_id}
+							/>
+						)}
 					/>
 				</Switch>
 			</div>
@@ -97,6 +104,9 @@ const mapDispatchToProps = dispatch => {
 		onLogout: () => dispatch(actionCreators.logout()),
 		addNewTeam: data => {
 			dispatch(actionCreators.addNewTeam(data));
+		},
+		addPlayer: data => {
+			dispatch(actionCreators.addPlayer(data));
 		}
 	};
 };

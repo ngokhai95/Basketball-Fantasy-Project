@@ -1,4 +1,4 @@
-import * as actionTypes from './actions.js';
+import * as actionTypes from "./actions.js";
 
 // import axios from 'axios';
 
@@ -24,26 +24,35 @@ const reducer = (state = initialState, action) => {
 					username: data.username,
 					userID: data.user_id,
 					teamInfo: data.team_info
-				}
+				};
 			} else {
-				// let user know of failure
 				return {
 					...state
-				}
+				};
 			}
 		case actionTypes.LOGOUT:
 			return {
 				...state,
 				loggedIn: false
-			}
+			};
 		case actionTypes.ADDTEAM:
 			return {
 				...state,
 				teamInfo: action.payload
-			}
+			};
+		case actionTypes.ADDPLAYER:
+			let index = parseInt(action.payload[0]);
+			let playerID = action.payload[1];
+			let original = initialState.teamCreation;
+			original[index] = playerID;
+			console.log(original);
+			return {
+				...state,
+				teamCreation: original
+			};
 		default:
 			return state;
 	}
-}
+};
 
 export default reducer;
