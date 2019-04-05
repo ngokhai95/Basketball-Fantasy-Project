@@ -81,16 +81,16 @@ class LoginPage extends Component {
               onChange={this.handlePasswordChange}
             />
           </Form.Group>
-          <Button variant="info" type="button" onClick={this.goToRegisterPage}>
-            Register
-          </Button>
-          <Button variant="danger" type="button" onClick={this.props.onLogout}>
-            Logout
-          </Button>
+
           <Button variant="primary" type="button" onClick={this.sendLogin}>
             Login
           </Button>
           {failLoginMessage}
+          <br />
+          <br />
+          <Button variant="info" type="button" onClick={this.goToRegisterPage}>
+            Register
+          </Button>
         </Form>
       </Container>
     );

@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
-import InputComponent from "./../../components/InputComponent/inputcomponent.js";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
 
 const SERVER_ADDRESS = "http://127.0.0.1:8000";
 
@@ -60,40 +62,57 @@ class RegisterPage extends Component {
 		}
 
 		return (
-			<div>
-				<h1>RegisterPage</h1>
-				<label>
-					Username:
-					<InputComponent
-						name={this.state.username}
-						handleChange={this.handleUsernameChange}
-					/>
-				</label>
-				<br />
-				<label>
-					Password:
-					<InputComponent
-						name={this.state.password}
-						handleChange={this.handlePasswordChange}
-						type={"password"}
-					/>
-				</label>
-				<br />
-				<label>
-					Full Name:
-					<InputComponent
-						name={this.state.fullname}
-						handleChange={this.handleFullNameChange}
-					/>
-				</label>
-				<br />
-				<button onClick={this.registerAccount}>Register Account</button>
+			<Container>
+				<h3>Register Page</h3>
+				<Form className="form-signin">
+					<Form.Group controlId="registerUserId">
+						<Form.Label>Username</Form.Label>
+						<Form.Control
+							className="form-control"
+							value={this.state.username}
+							placeholder="Enter Username"
+							onChange={this.handleUsernameChange}
+						/>
+					</Form.Group>
 
+					<Form.Group controlId="registerPassword">
+						<Form.Label>Password</Form.Label>
+						<Form.Control
+							className="form-control"
+							value={this.state.password}
+							placeholder="Enter Password"
+							type="password"
+							onChange={this.handlePasswordChange}
+						/>
+					</Form.Group>
+
+					<Form.Group controlId="registerFullname">
+						<Form.Label>Full Name</Form.Label>
+						<Form.Control
+							className="form-control"
+							value={this.state.fullname}
+							placeholder="Enter your Full Name"
+							onChange={this.handleFullNameChange}
+						/>
+					</Form.Group>
+				</Form>
+				<Button
+					variant="secondary"
+					type="button"
+					onClick={this.registerAccount}
+				>
+					Register Account
+				</Button>
 				{registerMessageBlock}
 				<br />
-
-				<button onClick={this.goToLoginPage}>Go back to Login</button>
-			</div>
+				<Button
+					variant="info"
+					type="button"
+					onClick={this.goToLoginPage}
+				>
+					Go back to Login
+				</Button>
+			</Container>
 		);
 	}
 }

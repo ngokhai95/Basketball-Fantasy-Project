@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import InputComponent from "./../../components/InputComponent/inputcomponent.js";
+import Button from "react-bootstrap/Button";
 
 import axios from "axios";
 
@@ -65,10 +66,18 @@ class MainPage extends Component {
 					<p>Defensive Score: {teamInfo.defensive_score}</p>
 					<p>Offensive Score: {teamInfo.offensive_score}</p>
 					<p>Overall Score: {teamInfo.overall_score}</p>
-					<button onClick={this.goToTeamCreationPage}>
-						Create New Team
-					</button>
-					<button>Simulate</button>
+
+					<Button
+						variant="primary"
+						type="button"
+						onClick={this.goToTeamCreationPage}
+					>
+						Edit Team
+					</Button>
+
+					<Button variant="info" type="button">
+						Simulate
+					</Button>
 				</div>
 			);
 		}

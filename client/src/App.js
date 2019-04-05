@@ -18,8 +18,10 @@ class App extends Component {
 		return (
 			<div className="App">
 				<Header
+					history={this.props.history}
 					loggedIn={this.props.loggedIn}
 					username={this.props.username}
+					onLogOut={this.props.onLogout}
 				/>
 
 				<Switch>
@@ -68,7 +70,7 @@ class App extends Component {
 						)}
 					/>
 					<Route
-						path="/search"
+						path="/search/:playerIndex"
 						render={props => <SearchPage {...props} />}
 					/>
 				</Switch>

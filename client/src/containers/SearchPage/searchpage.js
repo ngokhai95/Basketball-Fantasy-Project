@@ -15,7 +15,8 @@ class SearchPage extends Component {
       playerNameSearchTerm: "",
       teamSearchTerm: "",
       jerseyNumberSearchterm: "",
-      players: []
+      players: [],
+      playerIndexToChange: this.props.match.params.playerIndex
     };
   }
 

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-
-import AddPlayerComponent from "./../../components/AddPlayerComponent/addplayercomponent.js";
+import Button from "react-bootstrap/Button";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
 
 class TeamCreationPage extends Component {
 	constructor(props) {
@@ -9,9 +9,9 @@ class TeamCreationPage extends Component {
 		this.state = {};
 	}
 
-	goToSearchPage = () => {
+	goToSearchPage = index => {
 		this.props.history.push({
-			pathname: "/search"
+			pathname: `/search/${index}`
 		});
 	};
 
@@ -23,13 +23,14 @@ class TeamCreationPage extends Component {
 		const teamMembers = teamCreation.map((player, index) => {
 			if (player == null) {
 				return (
-					<div key={index}>
-						<AddPlayerComponent
-							index={index}
-							searchForPlayer={this.goToSearchPage}
-						/>
-						<br />
-					</div>
+					<Button
+						key={index}
+						onClick={() => {
+							this.goToSearchPage(index);
+						}}
+					>
+						Add Player {index + 1}
+					</Button>
 				);
 			} else {
 				return <p>player: {player}</p>;
@@ -39,7 +40,7 @@ class TeamCreationPage extends Component {
 			<div>
 				<h1>Team Creation Page</h1>
 				<p>Team Name: {teamInfo.team_name}</p>
-				{teamMembers}
+				<ButtonGroup vertical>{teamMembers}</ButtonGroup>
 			</div>
 		);
 	}
