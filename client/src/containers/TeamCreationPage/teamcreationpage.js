@@ -4,6 +4,7 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import axios from "axios";
 import Badge from "react-bootstrap/Badge";
 import Modal from "react-bootstrap/Modal";
+import Image from "react-bootstrap/Image";
 
 const SERVER_ADDRESS = "http://127.0.0.1:8000";
 
@@ -95,6 +96,7 @@ class TeamCreationPage extends Component {
 			} else {
 				return (
 					<h1 key={index}>
+						<Image src={require("../../img/captain_false.png")} />
 						<Badge pill variant="secondary">
 							{player.name}
 						</Badge>
