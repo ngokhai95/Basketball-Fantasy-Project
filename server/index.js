@@ -221,3 +221,18 @@ app.post("/getPlayers", (req, res) => {
     }
   });
 });
+
+app.post("/sellPlayer", (req, res) => {
+  let playerID = req.body.playerID;
+  let teamID = req.body.teamID;
+
+  let query = `DELETE FROM Transactions WHERE player_id = ${playerID} AND team_id = ${teamID}`;
+
+  connection.query(query, (error, result) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.send("sell player successful");
+    }
+  });
+});

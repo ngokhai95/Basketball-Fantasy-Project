@@ -66,6 +66,7 @@ class App extends Component {
 								{...props}
 								teamInfo={this.props.teamInfo}
 								teamCreation={this.props.teamCreation}
+								sellPlayer={this.props.sellPlayer}
 							/>
 						)}
 					/>
@@ -106,6 +107,9 @@ const mapDispatchToProps = dispatch => {
 		},
 		addPlayer: data => {
 			dispatch(actionCreators.addPlayer(data));
+		},
+		sellPlayer: data => {
+			dispatch(actionCreators.sellPlayer(data));
 		}
 	};
 };

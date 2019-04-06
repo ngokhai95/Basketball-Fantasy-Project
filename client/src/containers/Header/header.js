@@ -16,6 +16,19 @@ class Header extends Component {
 		this.props.onLogOut();
 	};
 
+	goToMainPage = () => {
+		this.props.history.push("./main");
+	};
+
+	goToManageTeam = () => {
+		this.props.history.push("./createteam");
+	};
+
+	// TODO: create manage account page
+	goToManageAccount = () => {
+		console.log("manage account");
+	};
+
 	render() {
 		let accountInfo = null;
 
@@ -25,10 +38,13 @@ class Header extends Component {
 					<h3>{this.props.username}</h3>
 
 					<NavDropdown title="Menu" id="basic-nav-dropdown">
-						<NavDropdown.Item href="#/action-1">
+						<NavDropdown.Item onClick={this.goToMainPage}>
+							Main
+						</NavDropdown.Item>
+						<NavDropdown.Item onClick={this.goToManageAccount}>
 							Manage Account
 						</NavDropdown.Item>
-						<NavDropdown.Item href="#/action-2">
+						<NavDropdown.Item onClick={this.goToManageTeam}>
 							Manage Team
 						</NavDropdown.Item>
 						<NavDropdown.Item onClick={this.triggerLogout}>

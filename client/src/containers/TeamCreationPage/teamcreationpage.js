@@ -63,8 +63,27 @@ class TeamCreationPage extends Component {
 	};
 
 	// TODO: send server to sell
-	confirmSell = () => {
-		console.log("do something");
+	confirmSell = player => {
+		axios
+			.post(`${SERVER_ADDRESS}/sellPlayer`, {
+				playerID: player.player_id,
+				teamID: this.props.teamInfo.team_id
+			})
+			.then(response => {
+				this.props.sellPlayer(player.player_id);
+				this.updateList(player.player_id);
+				this.handleClose();
+			});
+	};
+
+	updateList = playerID => {
+		let playerList = this.state.players;
+		for (let i = 0; i < playerList.length; i++) {
+			if (playerList[i] != null && playerList[i].player_id == playerID) {
+				playerList[i] = null;
+			}
+		}
+		this.setState({ players: playerList });
 	};
 
 	render() {
@@ -76,15 +95,14 @@ class TeamCreationPage extends Component {
 					handleClose={this.handleClose}
 					show={this.state.show}
 					selectedPlayer={this.state.selectedPlayer}
-					confirmAdd={this.handleToggleSellPlayer}
+					confirmSell={this.confirmSell}
 				/>
 			);
 		}
 
 		let teamInfo = this.props.teamInfo;
-		let teamCreation = this.state.players;
 
-		const teamMembers = teamCreation.map((player, index) => {
+		const teamMembers = this.state.players.map((player, index) => {
 			if (player == null) {
 				return (
 					<Button

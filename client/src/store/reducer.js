@@ -51,6 +51,16 @@ const reducer = (state = initialState, action) => {
 				...state,
 				teamCreation: original
 			};
+		case actionTypes.SELLPLAYER:
+			let playerIDToSell = action.payload;
+			let indexToSell = state.teamCreation.indexOf(playerIDToSell);
+
+			let originalToSell = state.teamCreation;
+			originalToSell[indexToSell] = null;
+			return {
+				...state,
+				teamCreation: originalToSell
+			};
 		default:
 			return state;
 	}
