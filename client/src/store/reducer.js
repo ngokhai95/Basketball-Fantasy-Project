@@ -44,7 +44,7 @@ const reducer = (state = initialState, action) => {
 		case actionTypes.ADDPLAYER:
 			let index = parseInt(action.payload[0]);
 			let playerID = action.payload[1];
-			let original = initialState.teamCreation;
+			let original = state.teamCreation;
 			original[index] = playerID;
 			console.log(original);
 			return {

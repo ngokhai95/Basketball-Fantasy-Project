@@ -15,10 +15,13 @@ class TeamCreationPage extends Component {
 		this.handleShow = this.handleShow.bind(this);
 		this.handleClose = this.handleClose.bind(this);
 
-		let playerList = this.props.teamCreation.slice(
-			0,
-			this.props.teamCreation.indexOf(null)
-		);
+		let playerList = [];
+		for (let i = 0; i < this.props.teamCreation.length; i++) {
+			if (this.props.teamCreation[i] != null) {
+				playerList.push(this.props.teamCreation[i]);
+			}
+		}
+
 		if (playerList.length !== 0) {
 			axios
 				.post(`${SERVER_ADDRESS}/getPlayers`, {
