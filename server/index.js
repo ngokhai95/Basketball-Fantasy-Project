@@ -236,3 +236,38 @@ app.post("/sellPlayer", (req, res) => {
     }
   });
 });
+
+app.post("/getName", (req, res) => {
+  let userID = req.body.userID;
+
+  let query = `SELECT full_name FROM Users WHERE user_id = ${userID};`;
+
+  connection.query(query, (error, result) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.send(result[0]);
+    }
+  });
+});
+
+app.post("/requestUserChange", (req, res) => {
+  let userID = req.body.userID;
+  let newParam;
+  let query;
+  if (req.body.type == "name") {
+    newParam = req.body.fullName;
+    query = `UPDATE Users SET full_name = "${newParam}" WHERE user_id = ${userID}`;
+  } else if (req.body.type == "password") {
+    newParam = req.body.password;
+    query = `UPDATE Users SET user_password = "${newParam}" WHERE user_id = ${userID}`;
+  }
+
+  connection.query(query, (error, result) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.send(true);
+    }
+  });
+});

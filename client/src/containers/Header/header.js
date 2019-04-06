@@ -24,9 +24,8 @@ class Header extends Component {
 		this.props.history.push("./createteam");
 	};
 
-	// TODO: create manage account page
 	goToManageAccount = () => {
-		console.log("manage account");
+		this.props.history.push("./manageaccount");
 	};
 
 	render() {

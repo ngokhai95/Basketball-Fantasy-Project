@@ -12,6 +12,7 @@ import RegisterPage from "./containers/RegisterPage/registerpage.js";
 import MainPage from "./containers/MainPage/mainpage.js";
 import TeamCreationPage from "./containers/TeamCreationPage/teamcreationpage.js";
 import SearchPage from "./containers/SearchPage/searchpage.js";
+import AccountManagementPage from "./containers/AccountManagementPage/accountmanagementpage.js";
 
 class App extends Component {
 	render() {
@@ -43,6 +44,16 @@ class App extends Component {
 								completeLogin={this.props.completeLogin}
 								onLogout={this.props.onLogout}
 								loggedIn={this.props.loggedIn}
+							/>
+						)}
+					/>
+					<Route
+						path="/manageaccount"
+						exact
+						render={props => (
+							<AccountManagementPage
+								{...props}
+								userID={this.props.userID}
 							/>
 						)}
 					/>
