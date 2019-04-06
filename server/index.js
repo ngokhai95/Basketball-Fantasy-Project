@@ -80,19 +80,34 @@ app.post("/login", (req, res) => {
           login: true,
           username: result[0].user_name,
           user_id: result[0].user_id,
-          team_info: null
+          team_info: null,
+          team_creation: [null, null, null, null, null]
         };
 
         let teamID = result[0].team_id;
 
         if (teamID != null) {
-          let teamQuery = `SELECT * FROM Teams WHERE team_id = ${teamID}`;
+          let teamQuery = `SELECT * FROM Teams WHERE team_id = ${teamID};`;
           connection.query(teamQuery, (teamError, teamResult) => {
             if (teamError) {
               console.log(teamError);
             } else {
               message.team_info = teamResult[0];
-              res.send(message);
+
+              let teamPlayersQuery = `SELECT * FROM Transactions WHERE team_id = ${teamID};`;
+              connection.query(
+                teamPlayersQuery,
+                (teamPlayersError, teamPlayersResult) => {
+                  if (teamPlayersError) {
+                    console.log(teamPlayersError);
+                  } else {
+                    for (let i = 0; i < teamPlayersResult.length; i++) {
+                      message.team_creation[i] = teamPlayersResult[i].player_id;
+                    }
+                    res.send(message);
+                  }
+                }
+              );
             }
           });
         } else {
@@ -180,8 +195,29 @@ app.post("/search", (req, res) => {
 app.post("/addPlayer", (req, res) => {
   let playerID = req.body.playerID;
   let teamID = req.body.teamID;
-  let userID = req.body.userID;
 
-  res.send("ok");
-  console.log(playerID, teamID, userID);
+  let query = `INSERT INTO Transactions (player_id, team_id) VALUES (${playerID}, ${teamID});`;
+
+  connection.query(query, (error, result) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("added " + playerID + " to " + teamID);
+      res.send("ok");
+    }
+  });
+});
+
+app.post("/getPlayers", (req, res) => {
+  let players = req.body.players;
+
+  let query = `SELECT * FROM Players WHERE player_id IN (${players.join(",")})`;
+
+  connection.query(query, (error, result) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.send(result);
+    }
+  });
 });

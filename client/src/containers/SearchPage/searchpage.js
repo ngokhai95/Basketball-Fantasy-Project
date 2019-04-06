@@ -35,27 +35,20 @@ class SearchPage extends Component {
     this.setState({ show: true });
   };
 
-  /**
-* handles sending add player to server
-TODO: send request
-*/
   handleAddPlayerConfirmation = player => {
     console.log(this.props.teamID);
     axios
       .post(`${SERVER_ADDRESS}/addplayer`, {
-        userID: this.props.userID,
         teamID: this.props.teamID,
         playerID: player.player_id
       })
       .then(response => {
-        console.log(response);
         this.props.addPlayer([
           this.state.playerIndexToChange,
           player.player_id
         ]);
         this.props.history.push({ pathname: "/createteam" });
       });
-    console.log(`add player_id=${player.player_id} to team`);
   };
 
   handlePlayerNameInputChange = event => {

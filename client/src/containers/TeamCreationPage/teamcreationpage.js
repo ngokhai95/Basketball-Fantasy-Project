@@ -1,12 +1,35 @@
 import React, { Component } from "react";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
+import axios from "axios";
+
+const SERVER_ADDRESS = "http://127.0.0.1:8000";
 
 class TeamCreationPage extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {};
+		let playerList = this.props.teamCreation.slice(
+			0,
+			this.props.teamCreation.indexOf(null)
+		);
+		if (playerList.length !== 0) {
+			axios
+				.post(`${SERVER_ADDRESS}/getPlayers`, {
+					players: playerList
+				})
+				.then(response => {
+					let list = response.data;
+					for (let i = response.data.length; i < 5; i++) {
+						list.push(null);
+					}
+					this.setState({ players: list });
+				});
+		}
+
+		this.state = {
+			players: this.props.teamCreation
+		};
 	}
 
 	goToSearchPage = index => {
@@ -18,7 +41,7 @@ class TeamCreationPage extends Component {
 	render() {
 		let teamInfo = this.props.teamInfo;
 
-		let teamCreation = this.props.teamCreation;
+		let teamCreation = this.state.players;
 
 		const teamMembers = teamCreation.map((player, index) => {
 			if (player == null) {
@@ -33,7 +56,7 @@ class TeamCreationPage extends Component {
 					</Button>
 				);
 			} else {
-				return <p key={index}>player: {player}</p>;
+				return <p key={index}>player: {player.name}</p>;
 			}
 		});
 		return (

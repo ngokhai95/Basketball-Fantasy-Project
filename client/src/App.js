@@ -75,7 +75,6 @@ class App extends Component {
 							<SearchPage
 								{...props}
 								addPlayer={this.props.addPlayer}
-								userID={this.props.userID}
 								teamID={this.props.teamInfo.team_id}
 							/>
 						)}

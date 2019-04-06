@@ -23,7 +23,8 @@ const reducer = (state = initialState, action) => {
 					loggedIn: data.login,
 					username: data.username,
 					userID: data.user_id,
-					teamInfo: data.team_info
+					teamInfo: data.team_info,
+					teamCreation: data.team_creation
 				};
 			} else {
 				return {
