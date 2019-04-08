@@ -157,11 +157,13 @@ class SearchPage extends Component {
           <thead>
             <tr>
               <th>Name</th>
+              <th>Real Team</th>
               <th>Offensive Score</th>
               <th>Defensive Score</th>
               <th>Overall Score</th>
               <th>Position</th>
               <th>Jersey #</th>
+              <th>Wage (millions)</th>
               <th>Add to Team</th>
             </tr>
           </thead>
@@ -220,11 +222,13 @@ const PlayersTableRow = props => {
   return (
     <tr>
       <td>{props.aPlayer.name}</td>
+      <td>{props.aPlayer.real_team_name}</td>
       <td>{props.aPlayer.offense_score}</td>
       <td>{props.aPlayer.defense_score}</td>
       <td>{props.aPlayer.overall_score}</td>
       <td>{props.aPlayer.position}</td>
       <td>{props.aPlayer.jersey_number}</td>
+      <td>{props.aPlayer.wages}</td>
       <td>
         <Button
           type="button"
