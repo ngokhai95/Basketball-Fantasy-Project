@@ -25,20 +25,22 @@ CREATE TABLE Players(
     overall_hit_rate FLOAT(5, 4),
     three_point_hit_rate FLOAT(5, 4),
     offense_score INT,
-    overall_score INT,
     defense_score INT,
+    overall_score INT,
     jersey_number INT,
-    position VARCHAR(3)
+    position VARCHAR(3),
+    real_team_name VARCHAR(40),
+    wages INT DEFAULT 1
 );
 
 CREATE TABLE Teams(
 	team_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	team_name VARCHAR(20) UNIQUE,
     player_id INT,
-	captain INT,
-	overall_score INT,
-	offensive_score INT,
+	captain VARCHAR(20),
 	defensive_score INT, 
+    offensive_score INT,
+    overall_score INT,
     FOREIGN KEY (player_id) REFERENCES Players(player_id)
 );
 
@@ -57,6 +59,7 @@ CREATE TABLE Users(
     user_password VARCHAR(20) NOT NULL,
     full_name VARCHAR(20) NOT NULL,
     team_id INT,
+    budget INT,
     FOREIGN KEY (team_id) REFERENCES Teams(team_id)
 );
 
