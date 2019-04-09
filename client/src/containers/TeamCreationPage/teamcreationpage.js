@@ -33,7 +33,6 @@ class TeamCreationPage extends Component {
 					for (let i = 0; i < list.length; i++) {
 						totalValue += list[i].wages;
 					}
-					console.log(totalValue);
 					this.props.deductMoney(totalValue);
 					for (let i = response.data.length; i < 5; i++) {
 						list.push(null);
@@ -46,7 +45,8 @@ class TeamCreationPage extends Component {
 		this.state = {
 			players: this.props.teamCreation,
 			selectedPlayer: null,
-			show: false
+			show: false,
+			captain: this.props.teamInfo.player_id
 		};
 	}
 
@@ -75,7 +75,6 @@ class TeamCreationPage extends Component {
 		})
 	}
 
-	// TODO: send server to sell
 	confirmSell = player => {
 		axios
 			.post(`${SERVER_ADDRESS}/sellPlayer`, {
@@ -87,6 +86,9 @@ class TeamCreationPage extends Component {
 				this.props.refundMoney(player.wages);
 				this.updateList(player.player_id);
 				this.handleClose();
+				if (response.data) {
+					this.props.setCaptain({name: null, id: null});
+				}
 			});
 	};
 
@@ -99,6 +101,18 @@ class TeamCreationPage extends Component {
 		}
 		this.setState({ players: playerList });
 	};
+
+	setCaptain = player => {
+		axios.post(`${SERVER_ADDRESS}/setCaptain`, {
+			playerName: player.name,
+			playerID: player.player_id,
+			teamID: this.props.teamInfo.team_id
+		}).then(response => {
+			this.props.setCaptain({name: player.name, id: player.player_id});
+			this.setState({captain: player.player_id});
+			console.log(response);
+		})
+	}
 
 	render() {
 		let sellConfirm = null;
@@ -129,9 +143,15 @@ class TeamCreationPage extends Component {
 					</Button>
 				);
 			} else {
+				let captainPic = null;
+				if (this.state.captain === player.player_id) {
+					captainPic = <Image src={require("../../img/captain_true.png")} />
+				} else {
+					captainPic = <Image src={require("../../img/captain_false.png")} onClick={() => {this.setCaptain(player)}}/>
+				}
 				return (
 					<h1 key={index}>
-						<Image src={require("../../img/captain_false.png")} />
+						{captainPic}
 						<Badge pill variant="secondary">
 							{player.name}
 						</Badge>

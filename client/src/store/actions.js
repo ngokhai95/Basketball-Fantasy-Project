@@ -9,6 +9,7 @@ export const ADDPLAYER = "ADDPLAYER";
 export const SELLPLAYER = "SELLPLAYER";
 export const DEDUCTMONEY = "DEDUCTMONEY";
 export const REFUNDMONEY = "REFUNDMONEY";
+export const SETCAPTAIN = "SETCAPTAIN";
 
 export const logout = () => {
 	return {
@@ -54,6 +55,13 @@ export const deductMoney = data => {
 export const refundMoney = data => {
 	return {
 		type: REFUNDMONEY,
+		payload: data
+	}
+}
+
+export const setCaptain = data => {
+	return {
+		type: SETCAPTAIN,
 		payload: data
 	}
 }

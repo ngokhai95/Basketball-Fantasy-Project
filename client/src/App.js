@@ -81,6 +81,7 @@ class App extends Component {
 								deductMoney={this.props.deductMoney}
 								playerMoney={this.props.playerMoney}
 								refundMoney={this.props.refundMoney}
+								setCaptain={this.props.setCaptain}
 							/>
 						)}
 					/>
@@ -132,6 +133,9 @@ const mapDispatchToProps = dispatch => {
 		},
 		refundMoney: data => {
 			dispatch(actionCreators.refundMoney(data));
+		},
+		setCaptain: data => {
+			dispatch(actionCreators.setCaptain(data));
 		}
 	};
 };

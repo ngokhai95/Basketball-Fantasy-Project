@@ -75,6 +75,15 @@ const reducer = (state = initialState, action) => {
 				...state,
 				playerMoney: newRefunded
 			}
+		case actionTypes.SETCAPTAIN:
+			let captain = action.payload;
+			let newTeam = state.teamInfo;
+			newTeam.player_id = captain.id;
+			newTeam.captain = captain.name;
+			return {
+				...state,
+				teamInfo: newTeam
+			}
 		default:
 			return state;
 	}

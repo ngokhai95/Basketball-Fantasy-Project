@@ -232,9 +232,26 @@ app.post("/sellPlayer", (req, res) => {
     if (error) {
       console.log(error);
     } else {
-      res.send("sell player successful");
+      let checkCaptain = `SELECT player_id FROM Teams WHERE team_id = ${teamID};`;
+      connection.query(checkCaptain, (error, result) => {
+        let captainID = result[0].player_id;
+
+        if (playerID == captainID) {
+          let removeCaptain = `UPDATE Teams SET player_id = null, captain = null WHERE team_id = ${teamID};`;
+          connection.query(removeCaptain, (captainError, captainResult) => {
+            if (captainError) {
+              console.log(captainError);
+            } else {
+              res.send(true);
+            }
+          })
+        } else {
+          res.send(false);
+        }
+      });
     }
   });
+
 });
 
 app.post("/getName", (req, res) => {
@@ -263,6 +280,22 @@ app.post("/requestUserChange", (req, res) => {
     query = `UPDATE Users SET user_password = "${newParam}" WHERE user_id = ${userID}`;
   }
 
+  connection.query(query, (error, result) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.send(true);
+    }
+  });
+});
+
+app.post("/setCaptain", (req, res) => {
+  let playerID = req.body.playerID;
+  let playerName = req.body.playerName;
+  let teamID = req.body.teamID;
+  console.log(playerID, playerName);
+
+  let query = `UPDATE Teams SET player_id = ${playerID}, captain = "${playerName}" WHERE team_id = ${teamID};`;
   connection.query(query, (error, result) => {
     if (error) {
       console.log(error);
