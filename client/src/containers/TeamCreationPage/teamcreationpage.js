@@ -108,9 +108,11 @@ class TeamCreationPage extends Component {
 			playerID: player.player_id,
 			teamID: this.props.teamInfo.team_id
 		}).then(response => {
-			this.props.setCaptain({name: player.name, id: player.player_id});
-			this.setState({captain: player.player_id});
-			console.log(response);
+			if (response.data) {
+				this.props.setCaptain({name: player.name, id: player.player_id});
+				this.setState({captain: player.player_id});
+			}
+			
 		})
 	}
 

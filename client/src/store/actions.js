@@ -10,6 +10,7 @@ export const SELLPLAYER = "SELLPLAYER";
 export const DEDUCTMONEY = "DEDUCTMONEY";
 export const REFUNDMONEY = "REFUNDMONEY";
 export const SETCAPTAIN = "SETCAPTAIN";
+export const UPDATESTATS = "UPDATESTATS";
 
 export const logout = () => {
 	return {
@@ -49,19 +50,26 @@ export const deductMoney = data => {
 	return {
 		type: DEDUCTMONEY,
 		payload: data
-	}
-}
+	};
+};
 
 export const refundMoney = data => {
 	return {
 		type: REFUNDMONEY,
 		payload: data
-	}
-}
+	};
+};
 
 export const setCaptain = data => {
 	return {
 		type: SETCAPTAIN,
 		payload: data
-	}
-}
+	};
+};
+
+export const updateStats = data => {
+	return {
+		type: UPDATESTATS,
+		payload: data
+	};
+};

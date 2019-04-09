@@ -13,6 +13,7 @@ import MainPage from "./containers/MainPage/mainpage.js";
 import TeamCreationPage from "./containers/TeamCreationPage/teamcreationpage.js";
 import SearchPage from "./containers/SearchPage/searchpage.js";
 import AccountManagementPage from "./containers/AccountManagementPage/accountmanagementpage.js";
+import ComparePage from "./containers/ComparePage/comparepage.js";
 
 class App extends Component {
 	render() {
@@ -66,6 +67,8 @@ class App extends Component {
 								teamInfo={this.props.teamInfo}
 								userID={this.props.userID}
 								addNewTeam={this.props.addNewTeam}
+								teamPlayers={this.props.teamCreation}
+								updateStats={this.props.updateStats}
 							/>
 						)}
 					/>
@@ -95,6 +98,11 @@ class App extends Component {
 								playerMoney={this.props.playerMoney}
 							/>
 						)}
+					/>
+					<Route
+						path="/compare"
+						exact
+						render={props => <ComparePage {...props} />}
 					/>
 				</Switch>
 			</div>
@@ -136,6 +144,9 @@ const mapDispatchToProps = dispatch => {
 		},
 		setCaptain: data => {
 			dispatch(actionCreators.setCaptain(data));
+		},
+		updateStats: data => {
+			dispatch(actionCreators.updateStats(data));
 		}
 	};
 };

@@ -244,14 +244,13 @@ app.post("/sellPlayer", (req, res) => {
             } else {
               res.send(true);
             }
-          })
+          });
         } else {
           res.send(false);
         }
       });
     }
   });
-
 });
 
 app.post("/getName", (req, res) => {
@@ -301,6 +300,44 @@ app.post("/setCaptain", (req, res) => {
       console.log(error);
     } else {
       res.send(true);
+    }
+  });
+});
+
+app.post("/calculateStats", (req, res) => {
+  let players = req.body.teamPlayers;
+  let teamID = req.body.teamID;
+
+  let query = `SELECT offense_score, defense_score, overall_score FROM Players WHERE player_id IN (${players.join(
+    ","
+  )})`;
+
+  connection.query(query, (error, result) => {
+    if (error) {
+      console.log(error);
+    } else {
+      let defenseScore = 0;
+      let offenseScore = 0;
+      let overallScore = 0;
+
+      for (let i = 0; i < result.length; i++) {
+        defenseScore += result[i].defense_score;
+        offenseScore += result[i].offense_score;
+        overallScore += result[i].overall_score;
+      }
+      defenseScore = parseInt(defenseScore / 5);
+      offenseScore = parseInt(offenseScore / 5);
+      overallScore = parseInt(overallScore / 5);
+
+      let updateQuery = `UPDATE Teams SET defensive_score = ${defenseScore}, offensive_score = ${offenseScore}, overall_score = ${overallScore} WHERE team_id = ${teamID};`;
+
+      connection.query(updateQuery, (updateError, updateResult) => {
+        if (updateError) {
+          console.log(updateError);
+        } else {
+          res.send([defenseScore, offenseScore, overallScore]);
+        }
+      });
     }
   });
 });
