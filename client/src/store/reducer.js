@@ -18,7 +18,6 @@ const reducer = (state = initialState, action) => {
 		case actionTypes.LOGIN:
 			let data = action.payload;
 			if (data.login) {
-				console.log(data);
 				return {
 					...state,
 					loggedIn: data.login,
@@ -67,14 +66,14 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				playerMoney: newValue
-			}
+			};
 		case actionTypes.REFUNDMONEY:
 			let refund = action.payload;
 			let newRefunded = state.playerMoney + refund;
 			return {
 				...state,
 				playerMoney: newRefunded
-			}
+			};
 		case actionTypes.SETCAPTAIN:
 			let captain = action.payload;
 			let newTeam = state.teamInfo;
@@ -83,7 +82,19 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				teamInfo: newTeam
-			}
+			};
+		case actionTypes.UPDATESTATS:
+			let defenseScore = action.payload[0];
+			let offenseScore = action.payload[1];
+			let overallScore = action.payload[2];
+			let newTeamStats = state.teamInfo;
+			newTeamStats.defensive_score = defenseScore;
+			newTeamStats.offensive_score = offenseScore;
+			newTeamStats.overall_score = overallScore;
+			return {
+				...state,
+				teamInfo: newTeamStats
+			};
 		default:
 			return state;
 	}

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import InputComponent from "./../../components/InputComponent/inputcomponent.js";
 import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
 import axios from "axios";
 
@@ -11,9 +12,24 @@ class MainPage extends Component {
 		super(props);
 
 		this.state = {
-			setTeamName: ""
+			setTeamName: "",
+			calculateError: false
 		};
+
+		if (this.props.teamInfo != null) {
+			this.state.defenseScore = this.props.teamInfo.defensive_score;
+			this.state.offenseScore = this.props.teamInfo.offensive_score;
+			this.state.overallSCore = this.props.teamInfo.overall_score;
+		}
 	}
+
+	handleErrorShow = () => {
+		this.setState({ calculateError: true });
+	};
+
+	handleErrorClose = () => {
+		this.setState({ calculateError: false });
+	};
 
 	handleTeamNameChange = event => {
 		this.setState({
@@ -41,6 +57,46 @@ class MainPage extends Component {
 		});
 	};
 
+	calculateTeamStats = () => {
+		let numOfNull = 0;
+		for (let i = 0; i < this.props.teamPlayers.length; i++) {
+			if (this.props.teamPlayers[i] == null) {
+				numOfNull++;
+			}
+		}
+		if (numOfNull > 0) {
+			this.handleErrorShow();
+		} else {
+			axios
+				.post(`${SERVER_ADDRESS}/calculateStats`, {
+					teamPlayers: this.props.teamPlayers,
+					teamID: this.props.teamInfo.team_id
+				})
+				.then(response => {
+					this.props.updateStats(response.data);
+					this.setState({
+						defenseScore: this.props.teamInfo.defensive_score,
+						offenseScore: this.props.teamInfo.offensive_score,
+						overallScore: this.props.teamInfo.overall_score
+					});
+				});
+		}
+	};
+
+	goToComparisonPage = () => {
+		let numOfNull = 0;
+		for (let i = 0; i < this.props.teamPlayers.length; i++) {
+			if (this.props.teamPlayers[i] == null) {
+				numOfNull++;
+			}
+		}
+		if (numOfNull > 0) {
+			this.handleErrorShow();
+		} else {
+			this.props.history.push("./compare");
+		}
+	};
+
 	render() {
 		let pageDisplay = null;
 
@@ -58,14 +114,28 @@ class MainPage extends Component {
 			);
 		} else {
 			let teamInfo = this.props.teamInfo;
+			let calculateError = null;
+
+			if (this.state.calculateError) {
+				calculateError = (
+					<CalculateError
+						handleClose={this.handleErrorClose}
+						show={this.state.calculateError}
+					/>
+				);
+			}
 
 			pageDisplay = (
 				<div>
 					<p>TeamName: {teamInfo.team_name}</p>
 					<p>Captain: {teamInfo.captain}</p>
-					<p>Defensive Score: {teamInfo.defensive_score}</p>
-					<p>Offensive Score: {teamInfo.offensive_score}</p>
-					<p>Overall Score: {teamInfo.overall_score}</p>
+					<p>
+						Defensive Score: {this.props.teamInfo.defensive_score}
+					</p>
+					<p>
+						Offensive Score: {this.props.teamInfo.offensive_score}
+					</p>
+					<p>Overall Score: {this.props.teamInfo.overall_score}</p>
 
 					<Button
 						variant="primary"
@@ -74,10 +144,23 @@ class MainPage extends Component {
 					>
 						Edit Team
 					</Button>
-
-					<Button variant="info" type="button">
-						Simulate
+					<br />
+					<Button
+						variant="info"
+						type="button"
+						onClick={this.calculateTeamStats}
+					>
+						Calculate Team Stats
 					</Button>
+					<br />
+					<Button
+						variant="info"
+						type="button"
+						onClick={this.goToComparisonPage}
+					>
+						Compare with Other Teams
+					</Button>
+					{calculateError}
 				</div>
 			);
 		}
@@ -92,3 +175,21 @@ class MainPage extends Component {
 }
 
 export default MainPage;
+
+const CalculateError = props => {
+	return (
+		<Modal show={props.show} onHide={props.handleClose}>
+			<Modal.Header closeButton>
+				<Modal.Title>Not enough players</Modal.Title>
+			</Modal.Header>
+			<Modal.Body>
+				You do not have enough players to use this function.
+			</Modal.Body>
+			<Modal.Footer>
+				<Button variant="secondary" onClick={props.handleClose}>
+					Close
+				</Button>
+			</Modal.Footer>
+		</Modal>
+	);
+};
