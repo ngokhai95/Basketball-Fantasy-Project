@@ -9,7 +9,8 @@ const initialState = {
 	username: null,
 	userID: null,
 	teamInfo: null,
-	teamCreation: [null, null, null, null, null]
+	teamCreation: [null, null, null, null, null],
+	playerMoney: 25
 };
 
 const reducer = (state = initialState, action) => {
@@ -46,7 +47,6 @@ const reducer = (state = initialState, action) => {
 			let playerID = action.payload[1];
 			let original = state.teamCreation;
 			original[index] = playerID;
-			console.log(original);
 			return {
 				...state,
 				teamCreation: original
@@ -61,6 +61,20 @@ const reducer = (state = initialState, action) => {
 				...state,
 				teamCreation: originalToSell
 			};
+		case actionTypes.DEDUCTMONEY:
+			let moneyToDeduct = action.payload;
+			let newValue = initialState.playerMoney - moneyToDeduct;
+			return {
+				...state,
+				playerMoney: newValue
+			}
+		case actionTypes.REFUNDMONEY:
+			let refund = action.payload;
+			let newRefunded = state.playerMoney + refund;
+			return {
+				...state,
+				playerMoney: newRefunded
+			}
 		default:
 			return state;
 	}

@@ -29,9 +29,16 @@ class TeamCreationPage extends Component {
 				})
 				.then(response => {
 					let list = response.data;
+					let totalValue = 0;
+					for (let i = 0; i < list.length; i++) {
+						totalValue += list[i].wages;
+					}
+					console.log(totalValue);
+					this.props.deductMoney(totalValue);
 					for (let i = response.data.length; i < 5; i++) {
 						list.push(null);
 					}
+
 					this.setState({ players: list });
 				});
 		}
@@ -62,6 +69,12 @@ class TeamCreationPage extends Component {
 		});
 	};
 
+	goToMainPage = () => {
+		this.props.history.push({
+			pathname: "./main"
+		})
+	}
+
 	// TODO: send server to sell
 	confirmSell = player => {
 		axios
@@ -71,6 +84,7 @@ class TeamCreationPage extends Component {
 			})
 			.then(response => {
 				this.props.sellPlayer(player.player_id);
+				this.props.refundMoney(player.wages);
 				this.updateList(player.player_id);
 				this.handleClose();
 			});
@@ -136,9 +150,13 @@ class TeamCreationPage extends Component {
 		return (
 			<div>
 				<h1>Team Creation Page</h1>
-				<p>Team Name: {teamInfo.team_name}</p>
+				<h3>Team Name: {teamInfo.team_name}</h3>
+				<h4>Money Left to Spend: ${this.props.playerMoney} million</h4>
 				<ButtonGroup vertical>{teamMembers}</ButtonGroup>
 				{sellConfirm}
+				<br/>
+				<br/>
+				<Button onClick={this.goToMainPage}>Go back to Main</Button>
 			</div>
 		);
 	}

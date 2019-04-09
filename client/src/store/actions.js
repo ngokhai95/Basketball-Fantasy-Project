@@ -7,6 +7,8 @@ export const LOGOUT = "LOGOUT";
 export const ADDTEAM = "ADDTEAM";
 export const ADDPLAYER = "ADDPLAYER";
 export const SELLPLAYER = "SELLPLAYER";
+export const DEDUCTMONEY = "DEDUCTMONEY";
+export const REFUNDMONEY = "REFUNDMONEY";
 
 export const logout = () => {
 	return {
@@ -41,3 +43,17 @@ export const sellPlayer = data => {
 		payload: data
 	};
 };
+
+export const deductMoney = data => {
+	return {
+		type: DEDUCTMONEY,
+		payload: data
+	}
+}
+
+export const refundMoney = data => {
+	return {
+		type: REFUNDMONEY,
+		payload: data
+	}
+}

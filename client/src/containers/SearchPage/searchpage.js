@@ -23,7 +23,8 @@ class SearchPage extends Component {
       players: [],
       playerIndexToChange: this.props.match.params.playerIndex,
       show: false,
-      selectedPlayer: null
+      selectedPlayer: null,
+      priceError: false
     };
   }
 
@@ -35,20 +36,33 @@ class SearchPage extends Component {
     this.setState({ show: true });
   };
 
+  handlePriceErrorShow = () => {
+    this.setState({ priceError: true });
+  }
+
+  handlePriceErrorClose = () => {
+    this.setState({ priceError: false });
+  }
+
   handleAddPlayerConfirmation = player => {
-    console.log(this.props.teamID);
-    axios
-      .post(`${SERVER_ADDRESS}/addplayer`, {
-        teamID: this.props.teamID,
-        playerID: player.player_id
-      })
-      .then(response => {
-        this.props.addPlayer([
-          this.state.playerIndexToChange,
-          player.player_id
-        ]);
-        this.props.history.push({ pathname: "/createteam" });
-      });
+    if (player.wages > this.props.playerMoney) {
+      this.handleClose();
+      this.handlePriceErrorShow();
+    } else {
+      axios
+        .post(`${SERVER_ADDRESS}/addplayer`, {
+          teamID: this.props.teamID,
+          playerID: player.player_id
+        })
+        .then(response => {
+          this.props.addPlayer([
+            this.state.playerIndexToChange,
+            player.player_id
+          ]);
+          this.props.history.push({ pathname: "/createteam" });
+        });
+    }
+    
   };
 
   handlePlayerNameInputChange = event => {
@@ -65,7 +79,6 @@ class SearchPage extends Component {
 
   handleSearchSubmit = event => {
     event.preventDefault();
-    console.log("Submitting search");
     axios
       .post(`${SERVER_ADDRESS}/search`, {
         playerSearchTerm: this.state.playerNameSearchTerm,
@@ -92,6 +105,7 @@ class SearchPage extends Component {
 
   render() {
     let buyConfirm = null;
+    let priceError = null;
 
     if (this.state.show) {
       buyConfirm = (
@@ -103,9 +117,20 @@ class SearchPage extends Component {
         />
       );
     }
+    if (this.state.priceError) {
+      priceError = (
+        <PriceError
+          handleClose={this.handlePriceErrorClose}
+          show={this.state.priceError}
+           selectedPlayer={this.state.selectedPlayer}
+        />
+        );
+    }
+
     return (
       <Container>
         <h1>SearchPage</h1>
+        <h5>You have ${this.props.playerMoney} million to spend.</h5>
         <Form className="search-form" onSubmit={this.handleSearchSubmit}>
           <Form.Group as={Form.Row}>
             <Form.Label column sm={2}>
@@ -162,6 +187,7 @@ class SearchPage extends Component {
               <th>Overall Score</th>
               <th>Position</th>
               <th>Jersey #</th>
+              <th>Buyout $</th>
               <th>Add to Team</th>
             </tr>
           </thead>
@@ -171,9 +197,28 @@ class SearchPage extends Component {
           />
         </Table>
         {buyConfirm}
+        {priceError}
       </Container>
     );
   }
+}
+
+const PriceError = props => {
+  return (
+    <Modal show={props.show} onHide={props.handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Too expensive!</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        You lack the funds to add {props.selectedPlayer.name} to your team.
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={props.handleClose}>
+          Close
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
 }
 
 const BuyConfirm = props => {
@@ -225,6 +270,7 @@ const PlayersTableRow = props => {
       <td>{props.aPlayer.overall_score}</td>
       <td>{props.aPlayer.position}</td>
       <td>{props.aPlayer.jersey_number}</td>
+      <td>${props.aPlayer.wages} million</td>
       <td>
         <Button
           type="button"

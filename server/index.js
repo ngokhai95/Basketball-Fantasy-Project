@@ -181,12 +181,12 @@ app.post("/search", (req, res) => {
   let playerSearchQuery = `SELECT * FROM Players WHERE ${searchPlayersQuery} OR (${jerseySearchTermQuery})`;
   connection.query(playerSearchQuery, (error, result) => {
     if (error) {
-      console.log();
       console.log(error);
     } else {
       let message = {
         playersSearchResult: result
       };
+      console.log(message);
       res.send(message);
     }
   });

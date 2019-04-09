@@ -78,6 +78,9 @@ class App extends Component {
 								teamInfo={this.props.teamInfo}
 								teamCreation={this.props.teamCreation}
 								sellPlayer={this.props.sellPlayer}
+								deductMoney={this.props.deductMoney}
+								playerMoney={this.props.playerMoney}
+								refundMoney={this.props.refundMoney}
 							/>
 						)}
 					/>
@@ -88,6 +91,7 @@ class App extends Component {
 								{...props}
 								addPlayer={this.props.addPlayer}
 								teamID={this.props.teamInfo.team_id}
+								playerMoney={this.props.playerMoney}
 							/>
 						)}
 					/>
@@ -103,7 +107,8 @@ const mapStateToProps = state => {
 		username: state.username,
 		userID: state.userID,
 		teamInfo: state.teamInfo,
-		teamCreation: state.teamCreation
+		teamCreation: state.teamCreation,
+		playerMoney: state.playerMoney
 	};
 };
 
@@ -121,6 +126,12 @@ const mapDispatchToProps = dispatch => {
 		},
 		sellPlayer: data => {
 			dispatch(actionCreators.sellPlayer(data));
+		},
+		deductMoney: data => {
+			dispatch(actionCreators.deductMoney(data));
+		},
+		refundMoney: data => {
+			dispatch(actionCreators.refundMoney(data));
 		}
 	};
 };
