@@ -72,8 +72,8 @@ class TeamCreationPage extends Component {
 	goToMainPage = () => {
 		this.props.history.push({
 			pathname: "./main"
-		})
-	}
+		});
+	};
 
 	confirmSell = player => {
 		axios
@@ -87,7 +87,7 @@ class TeamCreationPage extends Component {
 				this.updateList(player.player_id);
 				this.handleClose();
 				if (response.data) {
-					this.props.setCaptain({name: null, id: null});
+					this.props.setCaptain({ name: null, id: null });
 				}
 			});
 	};
@@ -95,7 +95,7 @@ class TeamCreationPage extends Component {
 	updateList = playerID => {
 		let playerList = this.state.players;
 		for (let i = 0; i < playerList.length; i++) {
-			if (playerList[i] != null && playerList[i].player_id == playerID) {
+			if (playerList[i] != null && playerList[i].player_id === playerID) {
 				playerList[i] = null;
 			}
 		}
@@ -103,18 +103,22 @@ class TeamCreationPage extends Component {
 	};
 
 	setCaptain = player => {
-		axios.post(`${SERVER_ADDRESS}/setCaptain`, {
-			playerName: player.name,
-			playerID: player.player_id,
-			teamID: this.props.teamInfo.team_id
-		}).then(response => {
-			if (response.data) {
-				this.props.setCaptain({name: player.name, id: player.player_id});
-				this.setState({captain: player.player_id});
-			}
-			
-		})
-	}
+		axios
+			.post(`${SERVER_ADDRESS}/setCaptain`, {
+				playerName: player.name,
+				playerID: player.player_id,
+				teamID: this.props.teamInfo.team_id
+			})
+			.then(response => {
+				if (response.data) {
+					this.props.setCaptain({
+						name: player.name,
+						id: player.player_id
+					});
+					this.setState({ captain: player.player_id });
+				}
+			});
+	};
 
 	render() {
 		let sellConfirm = null;
@@ -147,9 +151,18 @@ class TeamCreationPage extends Component {
 			} else {
 				let captainPic = null;
 				if (this.state.captain === player.player_id) {
-					captainPic = <Image src={require("../../img/captain_true.png")} />
+					captainPic = (
+						<Image src={require("../../img/captain_true.png")} />
+					);
 				} else {
-					captainPic = <Image src={require("../../img/captain_false.png")} onClick={() => {this.setCaptain(player)}}/>
+					captainPic = (
+						<Image
+							src={require("../../img/captain_false.png")}
+							onClick={() => {
+								this.setCaptain(player);
+							}}
+						/>
+					);
 				}
 				return (
 					<h1 key={index}>
@@ -176,8 +189,8 @@ class TeamCreationPage extends Component {
 				<h4>Money Left to Spend: ${this.props.playerMoney} million</h4>
 				<ButtonGroup vertical>{teamMembers}</ButtonGroup>
 				{sellConfirm}
-				<br/>
-				<br/>
+				<br />
+				<br />
 				<Button onClick={this.goToMainPage}>Go back to Main</Button>
 			</div>
 		);

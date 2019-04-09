@@ -186,7 +186,6 @@ app.post("/search", (req, res) => {
       let message = {
         playersSearchResult: result
       };
-      console.log(message);
       res.send(message);
     }
   });
