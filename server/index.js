@@ -165,20 +165,38 @@ app.post("/createTeam", (req, res) => {
 
 app.post("/search", (req, res) => {
   let playerNameSearchTerm = req.body.playerSearchTerm;
-  const teamSearchTerm = req.body.teamSearchTerm;
-  const jerseySearchTerm = req.body.jerseyNumberSearchterm;
+  let teamSearchTerm = req.body.teamSearchTerm;
+  let jerseySearchTerm = req.body.jerseyNumberSearchterm;
+  let wageBeginSearchTerm = parseInt(req.body.wageSearchTerm.beginWage);
+  let wageEndSearchTerm = parseInt(req.body.wageSearchTerm.endWage);
 
   if (playerNameSearchTerm === "") {
-    playerNameSearchTerm = "\\";
+    playerNameSearchTerm = "\\"; // default search term is "\" for empty values
   }
 
   let searchPlayersQuery = `lower(Players.name) LIKE '%${playerNameSearchTerm.toLowerCase()}%'`;
+
+  if (teamSearchTerm === "") {
+    teamSearchTerm = "\\";
+  }
+  let teamSearchQuery = `lower(Players.real_team_name) LIKE '%${teamSearchTerm.toLowerCase()}%'`;
 
   let jerseySearchTermQuery =
     `Players.jersey_number = ` +
     (jerseySearchTerm !== "" ? jerseySearchTerm : "1000"); // if jersey === "", make jersey a large number
 
-  let playerSearchQuery = `SELECT * FROM Players WHERE ${searchPlayersQuery} OR (${jerseySearchTermQuery})`;
+  let wagesSearchQuery = "OR ";
+  if (isNaN(wageBeginSearchTerm) && isNaN(wageEndSearchTerm)) {
+    wagesSearchQuery = "";
+  } else if (isNaN(wageBeginSearchTerm)) {
+    wagesSearchQuery += `Players.wages =< ${wageEndSearchTerm}`;
+  } else if (isNaN(wageEndSearchTerm)) {
+    wagesSearchQuery += `Players.wages >= ${wageBeginSearchTerm}`;
+  } else {
+    wagesSearchQuery += `Players.wages >= ${wageBeginSearchTerm} AND Players.wages <= ${wageEndSearchTerm}`;
+  }
+
+  let playerSearchQuery = `SELECT * FROM Players WHERE ${searchPlayersQuery} OR ${teamSearchQuery} OR (${jerseySearchTermQuery}) ${wagesSearchQuery}`;
   connection.query(playerSearchQuery, (error, result) => {
     if (error) {
       console.log(error);

@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Col from "react-bootstrap/Col";
 import Table from "react-bootstrap/Table";
+import InputGroup from "react-bootstrap/InputGroup";
 
 const SERVER_ADDRESS = "http://127.0.0.1:8000";
 
@@ -20,6 +21,10 @@ class SearchPage extends Component {
       playerNameSearchTerm: "",
       teamSearchTerm: "",
       jerseyNumberSearchterm: "",
+      wageSearchTerm: {
+        beginWage: "",
+        endWage: ""
+      },
       players: [],
       playerIndexToChange: this.props.match.params.playerIndex,
       show: false,
@@ -77,27 +82,29 @@ class SearchPage extends Component {
     this.setState({ jerseyNumberSearchterm: event.target.value });
   };
 
+  handleBeginWageInputChange = event => {
+    this.setState({wageSearchTerm: {beginWage: event.target.value, endWage: this.state.wageSearchTerm.endWage}});
+  }
+
+  handleEndWageInputChange = event => {
+    this.setState({wageSearchTerm: {beginWage: this.state.wageSearchTerm.beginWage, endWage: event.target.value}});
+  }
+
   handleSearchSubmit = event => {
     event.preventDefault();
     axios
       .post(`${SERVER_ADDRESS}/search`, {
         playerSearchTerm: this.state.playerNameSearchTerm,
         teamSearchTerm: this.state.teamSearchTerm,
-        jerseyNumberSearchterm: this.state.jerseyNumberSearchterm
+        jerseyNumberSearchterm: this.state.jerseyNumberSearchterm,
+        wageSearchTerm: this.state.wageSearchTerm
       })
       .then(response => {
-        // this.props.completeSearch(response.data);
-        // this.props.history.push("./main");
         console.log(response);
         this.setState({ players: response.data.playersSearchResult });
       });
   };
 
-  /**
-   * handles what happens when player clicks the add button
-   * TODO: Either check if a player exist in user's team before displaying in
-   * search result or check when adding it to transaction table
-   */
   handleToggleAddPlayerConfirmation = player => {
     this.setState({ selectedPlayer: player });
     this.handleShow();
@@ -154,7 +161,7 @@ class SearchPage extends Component {
               <Form.Control
                 value={this.state.teamSearchTerm}
                 type="text"
-                placeholder="e.g. Chicago Bulls"
+                placeholder="e.g. Bulls"
                 onChange={this.handleTeamInputChange}
               />
             </Col>
@@ -172,6 +179,30 @@ class SearchPage extends Component {
                 onChange={this.handleJerseyInputChange}
               />
             </Col>
+          </Form.Group>
+          <Form.Label>AND</Form.Label>
+          <Form.Group as={Form.Row}>
+          <Form.Label column sm={2}>
+            Wages
+          </Form.Label>
+          <Col sm={10}>
+          <InputGroup >
+            <InputGroup.Prepend>
+            <InputGroup.Text>From</InputGroup.Text>
+            </InputGroup.Prepend>
+            <Form.Control value={this.state.wageSearchTerm.beginWage}
+            placeholder="0"
+            onChange={this.handleBeginWageInputChange}
+            />
+            <InputGroup.Append>
+            <InputGroup.Text>To</InputGroup.Text>
+            </InputGroup.Append>
+            <Form.Control value={this.state.wageSearchTerm.endWage} placeholder="10" onChange={this.handleEndWageInputChange}/>
+            <InputGroup.Append>
+            <InputGroup.Text>million</InputGroup.Text>
+            </InputGroup.Append>
+          </InputGroup>
+          </Col>
           </Form.Group>
           <Button variant="primary" type="submit">
             Search
