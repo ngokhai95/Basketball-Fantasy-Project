@@ -180,7 +180,7 @@ class SearchPage extends Component {
               />
             </Col>
           </Form.Group>
-          <Form.Label>AND</Form.Label>
+          <Form.Label>OR</Form.Label>
           <Form.Group as={Form.Row}>
           <Form.Label column sm={2}>
             Wages

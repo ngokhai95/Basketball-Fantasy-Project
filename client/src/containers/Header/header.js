@@ -12,20 +12,20 @@ class Header extends Component {
 	}
 
 	triggerLogout = () => {
-		this.props.history.push("./");
+		this.props.history.push("../");
 		this.props.onLogOut();
 	};
 
 	goToMainPage = () => {
-		this.props.history.push("./main");
+		this.props.history.push("../main");
 	};
 
 	goToManageTeam = () => {
-		this.props.history.push("./createteam");
+		this.props.history.push("../createteam");
 	};
 
 	goToManageAccount = () => {
-		this.props.history.push("./manageaccount");
+		this.props.history.push("../manageaccount");
 	};
 
 	render() {
